@@ -1,0 +1,8 @@
+{
+  "name" : "guidelines",
+  "version" : "1.0.0",
+  "description" : "TEI Guidelines",
+  "dependencies" : {
+    "@teipublisher/pb-components" : "1.14.0"
+  }
+}
