@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="teipublisher_odds.xsd"?>
 <TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:pb="http://teipublisher.com/1.0" xmlns:ex="http://www.tei-c.org/ns/Examples" xml:lang="en">
     <teiHeader>
@@ -29,7 +28,9 @@
             </sourceDesc>
         </fileDesc>
         <encodingDesc>
-            <tagsDecl/>
+            <tagsDecl>
+                <rendition source="guidelines.css"/>
+            </tagsDecl>
         </encodingDesc>
         <revisionDesc>
             <change when="2021-02-01+01:00">Initial version</change>
@@ -39,15 +40,19 @@
         <body>
             <schemaSpec start="TEI teiCorpus" ident="tei" ns="" source="teipublisher.odd"> <elementSpec ident="gi" mode="add">
                     <model behaviour="link">
-            <param name="uri" value="'https://tei-c.org/release/doc/tei-p5-doc/en/html/ref-' || ./string() || '.html'"/>
+            <param name="uri" value="'ref/' || ."/>
             <param name="target" value="'_blank'"/>
         </model>
                 </elementSpec>
                 <elementSpec ident="ptr" mode="change">
-                    <model predicate="@target" behaviour="inline">
+                    <model predicate="starts-with(@target, '#')" behaviour="inline">
             <param name="id" value="substring-after(@target, '#')"/>
             <param name="label" value="id(substring-after(@target, '#'), root($parameters?root))/head[1]/string()"/>
             <pb:template xmlns="" xml:space="preserve"><pb-link xml-id="[[id]]">[[label]]</pb-link></pb:template>
+        </model>
+                    <model predicate="@target and string(.)=''" behaviour="inline">
+            <param name="target" value="@target"/>
+            <pb:template xmlns="" xml:space="preserve"><a href="[[target]]">[[target]]</a></pb:template>
         </model>
                     <model predicate="parent::notatedMusic" behaviour="webcomponent">
             <param name="name" value="'pb-mei'"/>
@@ -86,28 +91,41 @@
                 <elementSpec ident="specDesc" mode="add">
                     <model predicate="@key" behaviour="listItem" cssClass="specDesc">
             <param name="key" value="@key"/>
-            <param name="desc" value="let $key := @key return (root($parameters?root)//elementSpec[@ident=$key]/desc[@xml:lang='en'])[1]"/>
-            <pb:template xmlns="" xml:space="preserve"><span><span class="element"><a href="elements/[[key]]">[[key]]</a> </span>[[desc]]</span></pb:template>
+            <param name="description" value="let $key := @key let $target := root($parameters?root)/descendant-or-self::elementSpec[@ident=$key] return  $target/desc[@xml:lang=$parameters?language] "/>
+            <pb:template xmlns="" xml:space="preserve"><span>
+  <span class="element">&lt;<a href="ref/[[key]]">[[key]]</a>&gt; </span>
+  <span>[[description]]</span>
+</span></pb:template>
         </model>
                 </elementSpec>
                 <elementSpec ident="specList" mode="add">
-                    <model behaviour="list" cssClass="specList"/>
+                    <model behaviour="list" cssClass="specList">
+            <outputRendition xml:space="preserve">
+            list-style: none;
+            </outputRendition>
+        </model>
                 </elementSpec>
             <elementSpec ident="ex:egXML" mode="add">
-                    <model behaviour="block">
-            <param name="content" value="node()"/>
-            <pb:template xmlns="" xml:space="preserve"><pb-code-highlight language="xml" line-numbers="">
+                    <modelSequence>
+            <model behaviour="block">
+                <param name="content" value="node()"/>
+                <pb:template xmlns="" xml:space="preserve"><pb-code-highlight language="xml" theme="coy">
   <template>
     [[content]]
   </template>
 </pb-code-highlight></pb:template>
-        </model>
+            </model>
+            <model predicate="not(@source = ('#NONE', '#UND'))" behaviour="alternate" cssClass="bibl-link">
+                <param name="default" value="'bibliography'"/>
+                <param name="alternate" value="let $key := substring-after(@source, '#') return root($parameters?root)//id($key)"/>
+            </model>
+        </modelSequence>
                 </elementSpec>
             <elementSpec ident="specGrp" mode="add">
                     <model behaviour="omit"/>
                 </elementSpec>
                 <elementSpec ident="eg" mode="add">
-        <model behaviour="inline">
+                    <model behaviour="inline">
             <param name="content" value="."/>
             <pb:template xmlns="" xml:space="preserve"><pb-code-highlight>
   <template>
@@ -115,6 +133,17 @@
   </template>
 </pb-code-highlight></pb:template>
         </model>
+                </elementSpec>
+                <elementSpec ident="mentioned" mode="add">
+                    <model behaviour="inline">
+            <outputRendition xml:space="preserve">
+            font-style: italic;
+            </outputRendition>
+        </model>
+                </elementSpec>
+            <elementSpec ident="desc" mode="change">
+        <model predicate="@xml:lang != $parameters?language" behaviour="omit"/>
+        <model behaviour="inline"/>
     </elementSpec>
             </schemaSpec>
         </body>
