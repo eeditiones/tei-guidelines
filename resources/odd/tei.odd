@@ -45,16 +45,13 @@
         </model>
                 </elementSpec>
                 <elementSpec ident="ptr" mode="change">
-                    <modelSequence predicate="starts-with(@target, '#')">
-            <model behaviour="heading-number">
-                <param name="div" value="id(substring-after(@target, '#'), root($parameters?root))"/>
-            </model>
-            <model behaviour="inline">
-                <param name="id" value="substring-after(@target, '#')"/>
-                <param name="label" value="id(substring-after(@target, '#'), root($parameters?root))/head[1]/string()"/>
-                <pb:template xmlns="" xml:space="preserve"><pb-link xml-id="[[id]]">[[label]]</pb-link></pb:template>
-            </model>
-        </modelSequence>
+                    <model predicate="starts-with(@target, '#')" behaviour="inline" cssClass="inner-ref">
+            <param name="div" value="let $div := id(substring-after(@target, '#'), root($parameters?root))  let $pr := count($div/preceding-sibling::div) + 1  let $p1 := $div/parent::div let $an1 := $div/parent::div/preceding-sibling::div let $a1 := if ($p1) then count($an1) + 1 else ()  let $p2 := $p1/parent::div let $an2 := $p1/parent::div/preceding-sibling::div  let $a2 := if ($p2) then count($an2) + 1 else ()  let $p3 := $p2/parent::div let $an3 := $p2/parent::div/preceding-sibling::div let $a3 := if ($p3) then count($an3) + 1 else ()  let $p4 := $p3/parent::div let $an4 := $p3/parent::div/preceding-sibling::div let $a4 := if ($p3) then count($an4) + 1 else () return  string-join(($a3, $a2, $a1, $pr), '.')"/>
+            <param name="id" value="substring-after(@target, '#')"/>
+            <param name="label" value="id(substring-after(@target, '#'), root($parameters?root))/head[1]/string()"/>
+            <param name="space" value="' '"/>
+            <pb:template xmlns="" xml:space="preserve"><pb-link xml-id="[[id]]">[[div]] [[space]] [[label]]</pb-link></pb:template>
+        </model>
                     <model predicate="starts-with(@target, '#')" behaviour="inline">
             <param name="id" value="substring-after(@target, '#')"/>
             <param name="label" value="id(substring-after(@target, '#'), root($parameters?root))/head[1]/string()"/>
@@ -162,7 +159,7 @@
                 </elementSpec>
             <elementSpec ident="div" mode="change">
                     <modelSequence predicate="$parameters?mode='breadcrumbs'">
-            <model behaviour="link">
+            <model behaviour="link" cssClass="breadcrumb">
                 <param name="content" value="$get(.)/root(.)//titleStmt/title"/>
                 <param name="uri" value="util:document-name(.)"/>
             </model>
