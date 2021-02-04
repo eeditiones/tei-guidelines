@@ -14,3 +14,8 @@
 h1, h2, h3, h4, h5, h6 {
     font-family: "Londrina Solid", Verdana, "Helvetica", sans-serif;
 }
+
+.example {
+    margin: 10px 10px 10px 0px;
+    border: 1px solid green;
+}

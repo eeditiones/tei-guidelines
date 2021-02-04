@@ -122,9 +122,9 @@
                 </elementSpec>
             <elementSpec ident="ex:egXML" mode="add">
                     <modelSequence>
-            <model behaviour="block">
+            <model behaviour="block" cssClass="example">
                 <param name="content" value="node()"/>
-                <pb:template xmlns="" xml:space="preserve"><pb-code-highlight language="xml" theme="coy">
+                <pb:template xmlns="" xml:space="preserve"><pb-code-highlight language="xml" theme="solarizedlight">
   <template>
     [[content]]
   </template>
@@ -140,9 +140,9 @@
                     <model behaviour="omit"/>
                 </elementSpec>
                 <elementSpec ident="eg" mode="add">
-                    <model behaviour="inline">
+                    <model behaviour="block" cssClass="example">
             <param name="content" value="."/>
-            <pb:template xmlns="" xml:space="preserve"><pb-code-highlight>
+            <pb:template xmlns="" xml:space="preserve"><pb-code-highlight theme="solarizedlight">
   <template>
     [[content]]
   </template>
