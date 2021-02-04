@@ -89,7 +89,7 @@ declare variable $config:pagination-depth := 2;
  : up the page by pulling following divs in. When set to 0, it will never
  : attempt to fill up the page.
  :)
-declare variable $config:pagination-fill := 0;
+declare variable $config:pagination-fill := 1;
 
 (:
  : Display configuration for facets to be shown in the sidebar. The facets themselves
