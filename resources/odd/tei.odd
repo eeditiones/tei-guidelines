@@ -106,7 +106,7 @@
                 <elementSpec ident="specDesc" mode="add">
                     <model predicate="@key" behaviour="listItem" cssClass="specDesc">
             <param name="key" value="@key"/>
-            <param name="description" value="let $key := @key  let $target := root($parameters?root)/descendant-or-self::elementSpec[@ident=$key]  return  $target/desc[@xml:lang=$parameters?language]"/>
+            <param name="description" value="let $key := @key  let $target := root($parameters?root)/descendant-or-self::elementSpec[@ident=$key]  return  $target/desc[@xml:lang=$parameters?lng]"/>
             <pb:template xmlns="" xml:space="preserve"><span>
   <span class="element">&lt;<a href="ref/[[key]]">[[key]]</a>&gt; </span>
   <span>[[description]]</span>
@@ -157,7 +157,7 @@
         </model>
                 </elementSpec>
             <elementSpec ident="desc" mode="change">
-                    <model predicate="@xml:lang != $parameters?language" behaviour="omit"/>
+                    <model predicate="@xml:lang != $parameters?lng" behaviour="omit"/>
                     <model behaviour="inline"/>
                 </elementSpec>
             <elementSpec ident="div" mode="change">
