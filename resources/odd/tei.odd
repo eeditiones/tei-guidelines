@@ -52,11 +52,6 @@
             <param name="space" value="' '"/>
             <pb:template xmlns="" xml:space="preserve"><pb-link xml-id="[[id]]" emit="transcription">[[div]] [[space]] [[label]]</pb-link></pb:template>
         </model>
-                    <model predicate="starts-with(@target, '#')" behaviour="inline">
-            <param name="id" value="substring-after(@target, '#')"/>
-            <param name="label" value="id(substring-after(@target, '#'), root($parameters?root))/head[1]/string()"/>
-            <pb:template xmlns="" xml:space="preserve"><pb-link xml-id="[[id]]">[[label]]</pb-link></pb:template>
-        </model>
                     <model predicate="@target and string(.)=''" behaviour="inline">
             <param name="target" value="@target"/>
             <pb:template xmlns="" xml:space="preserve"><a href="[[target]]">[[target]]</a></pb:template>
@@ -123,7 +118,7 @@
             <elementSpec ident="ex:egXML" mode="add">
                     <modelSequence>
             <model behaviour="block" cssClass="example">
-                <param name="content" value="node()"/>
+                <param name="content" value="."/>
                 <pb:template xmlns="" xml:space="preserve"><pb-code-highlight language="xml" theme="solarizedlight">
   <template>
     [[content]]
@@ -180,6 +175,61 @@
         </model>
                     <model predicate="parent::body or parent::front or parent::back" behaviour="section"/>
                     <model behaviour="block"/>
+                </elementSpec>
+            <elementSpec ident="elementSpec" mode="add">
+                    <model predicate="$parameters?spec='element'" behaviour="block">
+            <param name="ident" value="@ident"/>
+            <param name="gloss" value="gloss[@xml:lang=$parameters?lng]"/>
+            <param name="lng" value="'en'"/>
+            <param name="desc" value="desc[@xml:lang=$parameters?lng]"/>
+            <param name="heading" value="@ident"/>
+            <param name="content" value="content"/>
+            <param name="members" value="for $i in classes/memberOf[not(starts-with(@key, 'att'))] let $n := $i/@key order by $n return $i"/>
+            <param name="module" value="@module"/>
+            <param name="attributes" value="attList"/>
+            <param name="example" value="exemplum[@xml:lang=$parameters?lng]"/>
+            <param name="attClass" value="for $i in classes/memberOf[starts-with(@key, 'att')] let $n := $i/@key order by $n return $i"/>
+            <param name="links" value="if (listRef/ptr) then (' [', listRef/ptr, ']') else ()"/>
+            <pb:template xmlns="" xml:space="preserve"><div class="element-spec">
+  <h3>[[ident]]</h3>
+  <table>
+    <tr><td colspan="2"><b>[[gloss]]</b> [[desc]] [[links]]</td></tr>
+    <tr><td>Module</td><td>[[module]]</td></tr>
+    <tr><td>Attributes</td><td><div>[[attClass]] [[attributes]]</div></td></tr>
+    <tr><td>Member of</td><td>[[members]]</td></tr>
+    <tr><td>Contained by</td><td>TODO</td></tr>
+    <tr><td>May contain</td><td>TODO</td></tr>
+    <tr><td>Example</td><td>[[example]]</td></tr>
+    <tr><td>Content model</td><td>TOFIX [[content]]</td></tr>
+    <tr><td>Schema declaration</td><td>TODO</td></tr>
+</table>
+</div></pb:template>
+        </model>
+                </elementSpec>
+                <elementSpec ident="content" mode="add">
+                    <model predicate="$parameters?mode='ref'" behaviour="block">
+            <param name="content" value="serialize(.,                     &lt;output:serialization-parameters xmlns:output=&#34;http://www.w3.org/2010/xslt-xquery-serialization&#34;&gt;                       &lt;output:indent&gt;yes&lt;/output:indent&gt;                     &lt;/output:serialization-parameters&gt;)"/>
+            <pb:template xmlns="" xml:space="preserve"><pb-code-highlight language="xml" theme="solarizedlight">
+  <template>
+    [[content]]
+  </template>
+</pb-code-highlight></pb:template>
+        </model>
+                </elementSpec>
+                <elementSpec ident="memberOf" mode="add">
+                    <model predicate="$parameters?mode='ref'" behaviour="link">
+            <param name="uri" value="'ref/'||@key"/>
+            <param name="content" value="@key"/>
+        </model>
+                </elementSpec>
+                <elementSpec ident="attDef" mode="add">
+                    <model predicate="$parameters?mode='ref'" behaviour="block">
+            <param name="name" value="@ident"/>
+            <param name="desc" value="desc[@xml:lang=$parameters?lng]"/>
+            <param name="content" value="(@usage, datatype/dataRef/@key)"/>
+            <pb:template xmlns="" xml:space="preserve"><tr><td>[[name]]</td><td>[[desc]]</td></tr>
+<tr><td/><td>[[content]]</td></tr></pb:template>
+        </model>
                 </elementSpec>
             </schemaSpec>
         </body>

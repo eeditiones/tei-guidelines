@@ -10,6 +10,7 @@ module namespace api="http://teipublisher.com/api/custom";
 
 (: Add your own module imports here :)
 import module namespace rutil="http://exist-db.org/xquery/router/util";
+import module namespace rapi="http://teipublisher.com/api/ref" at "ref.xql";
 import module namespace app="teipublisher.com/app" at "app.xql";
 
 (:~

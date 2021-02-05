@@ -25,6 +25,74 @@
         }
     },
     "paths": {
+        "/api/ref/{id}/html": {
+            "get": {
+                "summary": "Retrieve reference section content as HTML",
+                "description": "Retrieve a reference section (on element, model or attribute class) transformed to HTML via ODD",
+                "tags": [
+                    "documents"
+                ],
+                "operationId": "rapi:html",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "test/F-rom.xml"
+                        }
+                    },
+                    {
+                        "name": "odd",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "example": "shakespeare.odd"
+                        }
+                    },
+                    {
+                        "name": "base",
+                        "description": "Base URI to use",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "wc",
+                        "description": "Include TEI Publisher webcomponents",
+                        "in": "query",
+                        "schema": {
+                            "type": "boolean",
+                            "default": true
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns the entire reference section as HTML",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Specification not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     },
     "security": [
         {
