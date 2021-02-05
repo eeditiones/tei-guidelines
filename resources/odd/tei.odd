@@ -159,10 +159,6 @@
                 </elementSpec>
             <elementSpec ident="div" mode="change">
                     <modelSequence predicate="$parameters?mode='breadcrumbs'">
-            <model behaviour="link" cssClass="breadcrumb">
-                <param name="content" value="$get(.)/root(.)//titleStmt/title"/>
-                <param name="uri" value="util:document-name(.)"/>
-            </model>
             <model predicate="$get(.)/ancestor::div/head" behaviour="inline" cssClass="breadcrumb">
                 <param name="content" value="$get(.)/ancestor::div/head"/>
             </model>
@@ -247,9 +243,75 @@
             <param name="name" value="."/>
             <pb:template xmlns="" xml:space="preserve"><a href="ref/[[name]]">[[name]]</a></pb:template>
         </model>
-                    <model behaviour="inline">
+                    <model predicate="@type" behaviour="inline">
             <desc>other types: ge, file, datatype, pe, ns, frag, rng</desc>
         </model>
+                    <model behaviour="inline" cssClass="ident"/>
+                </elementSpec>
+            <elementSpec ident="teiHeader" mode="change">
+                    <model predicate="$parameters?mode='title'" behaviour="block" cssClass="title">
+            <desc>display as document title for Guidelines reading view</desc>
+            <param name="title" value=".//titleStmt/title"/>
+            <param name="version" value=".//editionStmt/edition"/>
+            <pb:template xmlns="" xml:space="preserve"><div>
+  <h2>[[title]]</h2>
+  [[version]]
+</div></pb:template>
+        </model>
+                    <model output="latex" behaviour="metadata"/>
+                    <model output="fo" behaviour="omit"/>
+                    <model output="web" predicate="$parameters?header='short'" behaviour="block"/>
+                    <model output="web" behaviour="metadata"/>
+                </elementSpec>
+                <elementSpec ident="title" mode="change">
+                    <model predicate="$parameters?header='short'" behaviour="heading">
+            <param name="level" value="5"/>
+        </model>
+                    <modelSequence predicate="parent::titleStmt/parent::fileDesc">
+            <model predicate="preceding-sibling::title" behaviour="text">
+                <param name="content" value="' — '"/>
+            </model>
+            <model behaviour="inline"/>
+        </modelSequence>
+                    <model predicate="not(@level) and parent::bibl" behaviour="inline"/>
+                    <modelSequence predicate="@level='m' or not(@level)">
+            <model behaviour="inline">
+                <outputRendition xml:space="preserve">
+                font-style: italic;
+                </outputRendition>
+            </model>
+            <model predicate="ancestor::biblFull" behaviour="text">
+                <param name="content" value="', '"/>
+            </model>
+        </modelSequence>
+                    <modelSequence predicate="@level='s' or @level='j'">
+            <model behaviour="inline">
+                <outputRendition xml:space="preserve">
+                font-style: italic;
+                </outputRendition>
+            </model>
+            <model predicate="following-sibling::* and     (  ancestor::biblFull)" behaviour="text">
+                <param name="content" value="', '"/>
+            </model>
+        </modelSequence>
+                    <modelSequence predicate="@level='u' or @level='a'">
+            <model behaviour="inline">
+                <outputRendition xml:space="preserve">
+                font-style: italic;
+                </outputRendition>
+            </model>
+            <model predicate="following-sibling::* and     (    ancestor::biblFull)" behaviour="text">
+                <param name="content" value="'. '"/>
+            </model>
+        </modelSequence>
+                    <model behaviour="inline">
+            <outputRendition xml:space="preserve">
+            font-style: italic;
+            </outputRendition>
+        </model>
+                </elementSpec>
+                <elementSpec ident="edition" mode="change">
+                    <model behaviour="inline"/>
                 </elementSpec>
             </schemaSpec>
         </body>
