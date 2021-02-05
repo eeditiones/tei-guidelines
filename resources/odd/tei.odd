@@ -101,10 +101,12 @@
                 <elementSpec ident="specDesc" mode="add">
                     <model predicate="@key" behaviour="listItem" cssClass="specDesc">
             <param name="key" value="@key"/>
-            <param name="description" value="let $key := @key  let $target := root($parameters?root)/descendant-or-self::elementSpec[@ident=$key]  return  $target/desc[@xml:lang=$parameters?lng]"/>
+            <param name="description" value="let $key := @key   let $target :=  if (starts-with($key, 'att')) then  (:attribute class:)  root($parameters?root)//classSpec[@ident=$key]  else if (starts-with($key, 'model')) then  (:model class:)  root($parameters?root)//modelSpec[@ident=$key]  else   (: element class :)  root($parameters?root)//elementSpec[@ident=$key]        return  $target/desc[@xml:lang=$parameters?lng]"/>
+            <param name="atts" value="let $key := @key let $atts := @atts return   if (starts-with($key, 'att')) then      for $att in tokenize($atts)        return root($parameters?root)//classSpec[@ident=$key]//attDef[@ident=$att]    else        ()"/>
             <pb:template xmlns="" xml:space="preserve"><span>
   <span class="element">&lt;<a href="ref/[[key]]">[[key]]</a>&gt; </span>
   <span>[[description]]</span>
+  [[atts]]
 </span></pb:template>
         </model>
                 </elementSpec>
@@ -127,7 +129,7 @@
             </model>
             <model predicate="not(@source = ('#NONE', '#UND'))" behaviour="alternate" cssClass="bibl-link">
                 <param name="default" value="'bibliography'"/>
-                <param name="alternate" value="let $key := substring-after(@source, '#') return root($parameters?root)//id($key)"/>
+                <param name="alternate" value="let $key := substring-after(@source, '#') return root($parameters?root)//id($key)/node()"/>
             </model>
         </modelSequence>
                 </elementSpec>
@@ -224,11 +226,29 @@
                 </elementSpec>
                 <elementSpec ident="attDef" mode="add">
                     <model predicate="$parameters?mode='ref'" behaviour="block">
+            <desc>display in reference pages</desc>
             <param name="name" value="@ident"/>
             <param name="desc" value="desc[@xml:lang=$parameters?lng]"/>
-            <param name="content" value="(@usage, datatype/dataRef/@key)"/>
-            <pb:template xmlns="" xml:space="preserve"><tr><td>[[name]]</td><td>[[desc]]</td></tr>
-<tr><td/><td>[[content]]</td></tr></pb:template>
+            <param name="usage" value="@usage"/>
+            <param name="datatype" value="datatype/dataRef/@key"/>
+            <pb:template xmlns="" xml:space="preserve"><tr><td><dl><dt>@[[name]]</dt> <dd>[[desc]]</dd></dl></td></tr>
+<tr><td><dl><dt>Usage</dt> <dd>[[usage]]</dd></dl>
+  <dl><dt>Datatype</dt> <dd>[[datatype]]</dd></dl></td></tr></pb:template>
+        </model>
+                    <model behaviour="block" cssClass="attribute">
+            <desc>display in the Guidelines text</desc>
+            <param name="name" value="@ident"/>
+            <param name="desc" value="desc[@xml:lang=$parameters?lng]"/>
+            <pb:template xmlns="" xml:space="preserve"><dl><dt>@[[name]]</dt> <dd>[[desc]]</dd></dl></pb:template>
+        </model>
+                </elementSpec>
+            <elementSpec ident="ident" mode="add">
+                    <model predicate="@type=('class', 'module', 'macro', 'schema')" behaviour="inline">
+            <param name="name" value="."/>
+            <pb:template xmlns="" xml:space="preserve"><a href="ref/[[name]]">[[name]]</a></pb:template>
+        </model>
+                    <model behaviour="inline">
+            <desc>other types: ge, file, datatype, pe, ns, frag, rng</desc>
         </model>
                 </elementSpec>
             </schemaSpec>
