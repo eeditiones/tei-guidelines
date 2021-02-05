@@ -36,5 +36,8 @@
             </text>
             <text qname="dbk:title"/>
         </lucene>
+        <range>
+            <create qname="@ident" type="xs:string"/>
+        </range>
     </index>
 </collection>
