@@ -36,3 +36,8 @@ dt {
 .title {
     text-align: right;
 }
+
+.tei-table {
+    font-size: smaller;
+    padding: 0px 10px;
+}
