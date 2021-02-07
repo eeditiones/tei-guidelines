@@ -41,3 +41,9 @@ dt {
     font-size: smaller;
     padding: 0px 10px;
 }
+
+a,
+a:visited {
+    color: gray;
+    text-decoration: none;
+}
