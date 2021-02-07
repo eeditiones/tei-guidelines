@@ -61,12 +61,10 @@ declare function vapi:view($request as map(*)) {
             doc($templatePath)
         else
             error($errors:NOT_FOUND, "template " || $templatePath || " not found")
-    let $model := map { 
+    let $model := map:merge(($request?parameters, map { 
         "doc": $path,
-        "template": $templateName,
-        "odd": $request?parameters?odd,
-        "view": $request?parameters?view
-    }
+        "template": $templateName
+    }))
     return
         templates:apply($template, vapi:lookup#2, $model, $vapi:template-config)
 };
