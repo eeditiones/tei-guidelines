@@ -68,16 +68,25 @@
 
                     <pb-drawer toggle="tocToggle" class="toc" emit="toc" subscribe="transcription">
                         <div class="drawer-content">
-                            <h3>
-                                <pb-i18n key="document.contents">Contents</pb-i18n>
-                            </h3>
-                            <pb-load id="toc" url="api/document/{doc}/contents?target=transcription&amp;icons=true" expand="expand" src="document1" subscribe="toc" load-once="load-once">
+                            <!-- <pb-load id="toc" url="api/ref/measure/html" subscribe="toc" load-once="load-once">
                                 <pb-i18n key="dialogs.loading">Loading</pb-i18n>
                             </pb-load>
+                        -->
+                            <h3>
+                                <pb-i18n key="document.contents">Contents</pb-i18n>                    
+                            </h3>             
+                            <pb-load id="toc" url="api/document/{doc}/contents?target=transcription&amp;icons=true" expand="expand" src="document1" subscribe="toc" load-once="load-once">
+                                <pb-i18n key="dialogs.loading">Loading</pb-i18n>
+                            </pb-load>                           
                         </div>
                     </pb-drawer>
                     <section class="breadcrumbs">
-                        <pb-view id="title-view1" src="document1" subscribe="transcription">
+                        <pb-view id="title-view1" src="document1" xpath="//teiHeader" view="single">
+                            <pb-param name="mode" value="title"/>
+                        </pb-view>
+                    </section>
+                    <section class="breadcrumbs">
+                        <pb-view id="breadcrumbs" src="document1" subscribe="transcription">
                             <pb-param name="mode" value="breadcrumbs"/>
                         </pb-view>
                     </section>
