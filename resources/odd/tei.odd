@@ -158,7 +158,15 @@
                     <model behaviour="inline"/>
                 </elementSpec>
             <elementSpec ident="div" mode="change">
+                    <model predicate="$parameters?mode='toc'" behaviour="block">
+            <param name="label" value="head/string()"/>
+            <param name="id" value="@xml:id"/>
+            <pb:template xmlns="" xml:space="preserve"><a href="p5.xml?id=[[id]]">[[label]]</a></pb:template>
+        </model>
                     <modelSequence predicate="$parameters?mode='breadcrumbs'">
+            <model behaviour="inline">
+                <param name="content" value="$get(.)/(ancestor::front | ancestor::back)"/>
+            </model>
             <model predicate="$get(.)/ancestor::div/head" behaviour="inline" cssClass="breadcrumb">
                 <param name="content" value="$get(.)/ancestor::div/head"/>
             </model>
@@ -251,7 +259,7 @@
             <elementSpec ident="teiHeader" mode="change">
                     <model predicate="$parameters?mode='title'" behaviour="block" cssClass="title">
             <desc>display as document title for Guidelines reading view</desc>
-            <param name="title" value=".//titleStmt/title"/>
+            <param name="title" value="string-join(root(.)//text/front//docTitle//title)"/>
             <param name="version" value=".//editionStmt/edition"/>
             <pb:template xmlns="" xml:space="preserve"><div>
   <h2>[[title]]</h2>
@@ -312,6 +320,32 @@
                 </elementSpec>
                 <elementSpec ident="edition" mode="change">
                     <model behaviour="inline"/>
+                </elementSpec>
+            <elementSpec ident="back" mode="change">
+                    <model predicate="$parameters?mode='breadcrumbs'" behaviour="inline" cssClass="breadcrumb">
+            <param name="content" value="'Back matter'"/>
+        </model>
+                    <model behaviour="block"/>
+                </elementSpec>
+                <elementSpec ident="front" mode="change">
+                    <model predicate="$parameters?mode='breadcrumbs'" behaviour="inline" cssClass="breadcrumb">
+            <param name="content" value="'Front matter'"/>
+        </model>
+                    <model behaviour="block"/>
+                </elementSpec>
+                <elementSpec ident="table" mode="change">
+                    <model behaviour="table"/>
+                </elementSpec>
+                <elementSpec ident="*">
+                    <model predicate="$parameters?mode='toc'" behaviour="omit"/>
+                </elementSpec>
+            <elementSpec ident="titlePage" mode="change">
+                    <model predicate="$parameters?mode='toc'" behaviour="omit"/>
+                    <model behaviour="block" useSourceRendition="true">
+            <outputRendition xml:space="preserve">
+             text-align: center;
+            </outputRendition>
+        </model>
                 </elementSpec>
             </schemaSpec>
         </body>

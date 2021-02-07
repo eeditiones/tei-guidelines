@@ -242,6 +242,8 @@
 
 <body>
     <pb-page data-template="pages:pb-page" unresolved="unresolved">
+        <pb-document id="document1" path="p5.xml"/>
+
         <app-drawer-layout force-narrow="force-narrow">
             <app-drawer slot="drawer" align="right">
                 <div class="drawer-content">
@@ -296,37 +298,36 @@
                 </app-header>
 
                 <main>
-                    <section>
-                        <h1 class="tp-title" data-template="config:app-title"/>
+                   
+
+                    <section class="breadcrumbs">
+                        <pb-view id="title-view1" src="document1" xpath="//teiHeader" view="single">
+                            <pb-param name="mode" value="title"/>
+                        </pb-view>
+                       
                     </section>
+
                     <section class="panels">
-                        <paper-card class="doclist" data-i18n="[heading]browse.documents" heading="documents">
-                            <div class="card-content">
-                                <div class="browse" slot="page">
-                                    <pb-custom-form id="facets" url="api/search/facets" event="pb-results-received" subscribe="docs" emit="docs"/>
-                                    <pb-browse-docs id="document-list" url="api/collection/" sort-options="[{&#34;label&#34;: &#34;browse.title&#34;, &#34;value&#34;: &#34;title&#34;},{&#34;label&#34;: &#34;browse.author&#34;, &#34;value&#34;: &#34;author&#34;}]" sort-by="title" filter-options="[{&#34;label&#34;: &#34;browse.title&#34;, &#34;value&#34;: &#34;title&#34;},{&#34;label&#34;: &#34;browse.author&#34;, &#34;value&#34;: &#34;author&#34;},{&#34;label&#34;: &#34;browse.file&#34;, &#34;value&#34;: &#34;file&#34;}]" filter-by="title" auto="auto" history="history" login="login" emit="docs" subscribe="docs">
-                                        <pb-paginate slot="toolbar" id="paginate" per-page="10" range="5" emit="docs" subscribe="docs"/>
-                                        <pb-restricted login="login" slot="toolbar">
-                                            <pb-ajax emit="docs" url="api/odd" method="post" data-template="pages:parse-params" event="pb-search-resubmit" title="Recompile ODD" data-i18n="[title]odd.manage.regenerate-all">
-                                                <h3 slot="title">
-                                                    <pb-i18n key="odd.manage.regenerate-all"/>
-                                                </h3>
-                                                <paper-icon-button icon="icons:update"/>
-                                            </pb-ajax>
-                                        </pb-restricted>
-                                    </pb-browse-docs>
-                                </div>
+                        <div>
+                            <div class="front">
+                                <h1> Front Matter</h1>
+                                <pb-view id="front" src="document1" xpath="//front" view="single">
+                                    <pb-param name="mode" value="toc"/>
+                                </pb-view>  
                             </div>
-                        </paper-card>
-                        <pb-restricted class="upload-panel" login="login">
-                            <aside>
-                                <paper-card class="upload" data-i18n="[heading]upload.upload" heading="Upload">
-                                    <div class="card-content">
-                                        <pb-upload id="upload" emit="docs" accept=".xml, .tei, .odd, .docx, .mei"/>
-                                    </div>
-                                </paper-card>
-                            </aside>
-                        </pb-restricted>
+                            <div class="back">
+                                <h1> Back Matter</h1>
+                                <pb-view id="back" src="document1" xpath="//back" view="single">
+                                    <pb-param name="mode" value="toc"/>
+                                </pb-view>  
+                            </div>
+                        </div>
+                        <div>
+                            <h1>Body</h1>
+                                <pb-view id="front" src="document1" xpath="//body" view="single">
+                                    <pb-param name="mode" value="toc"/>
+                                </pb-view> 
+                        </div>             
                     </section>
                 </main>
                 <footer class="version">
