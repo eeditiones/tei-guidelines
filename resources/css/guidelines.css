@@ -31,5 +31,10 @@ body {
 }
 
 .menubar .logo {
-    margin: 0 116px 0 0;
+    margin: 0 16px 0 0;
+}
+
+.github {
+    height: 40px;
+    width: auto;
 }

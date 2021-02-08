@@ -2,7 +2,8 @@
 <app-toolbar class="menubar">
     <a href="${app}/index.html" class="logo" data-template="pages:parse-params"/>
     <pb-media-query query="min-width: 1024px">
-        <a href="${app}/index.html" data-template="pages:parse-params">Start</a>
+        <a href="${app}/index.html" data-template="pages:parse-params">Guidelines</a>
+                                    
         <paper-menu-button>
             <a href="#" slot="dropdown-trigger" data-i18n="[title]menu.download.title" title="i18n(download)">
                 <pb-i18n key="menu.download.title">Download</pb-i18n>
@@ -40,6 +41,9 @@
                 </paper-item>
             </paper-listbox>
         </paper-menu-button>
+        <a href="https://tei-c.org/guidelines/p5/using-the-tei-github-repository/">Getting and Using the TEI Sources</a>
+        <a href="https://github.com/TEIC/TEI" target="_blank" title="TEI GitHub Repository"><img src="resources/images/GitHub-Mark-Light-64px.png" class="github"/></a>
+        <a href="https://github.com/TEIC/TEI/issues" target="_blank">Report an issue</a>
         <pb-restricted login="login">
             <paper-menu-button>
                 <a href="#" slot="dropdown-trigger">

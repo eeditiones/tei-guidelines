@@ -44,6 +44,14 @@ dt {
 
 a,
 a:visited {
-    color: gray;
+    font-weight: bolder;
+    color:#777777;
     text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+.title {
+    margin-bottom: 0.2em;
 }
