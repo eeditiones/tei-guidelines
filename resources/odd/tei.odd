@@ -126,13 +126,8 @@
                 </elementSpec>
             <elementSpec ident="ex:egXML" mode="add">
                     <modelSequence>
-            <model behaviour="block" cssClass="example">
+            <model behaviour="code" cssClass="example">
                 <param name="content" value="."/>
-                <pb:template xmlns="" xml:space="preserve"><pb-code-highlight language="xml" theme="solarizedlight">
-  <template>
-    [[content]]
-  </template>
-</pb-code-highlight></pb:template>
             </model>
             <model predicate="not(@source = ('#NONE', '#UND'))" behaviour="alternate" cssClass="bibl-link">
                 <param name="default" value="'bibliography'"/>
@@ -145,7 +140,7 @@
                 </elementSpec>
                 <elementSpec ident="eg" mode="add">
                     <model behaviour="block" cssClass="example">
-            <param name="content" value="."/>
+            <param name="content" value="node()"/>
             <pb:template xmlns="" xml:space="preserve"><pb-code-highlight theme="solarizedlight">
   <template>
     [[content]]

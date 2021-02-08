@@ -26,5 +26,10 @@ declare function pmf:passthrough($config as map(*), $node as element(), $class a
     $config?apply-children($config, $node, $content)
 };
 
+declare function pmf:code($config as map(*), $node as element(), $class as xs:string+, $content as node()*, $lang as item()?) {
+    <pb-code-highlight language="xml" theme="solarizedlight" class="{$class}">
+        <template>{$content/node()}</template>
+    </pb-code-highlight>
+};
 
 
