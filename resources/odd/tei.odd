@@ -45,13 +45,20 @@
         </model>
                 </elementSpec>
                 <elementSpec ident="ptr" mode="change">
-                    <model predicate="starts-with(@target, '#')" behaviour="inline" cssClass="inner-ref">
-            <param name="div" value="let $div := id(substring-after(@target, '#'), root($parameters?root))  let $pr := count($div/preceding-sibling::div) + 1  let $p1 := $div/parent::div let $an1 := $div/parent::div/preceding-sibling::div let $a1 := if ($p1) then count($an1) + 1 else ()  let $p2 := $p1/parent::div let $an2 := $p1/parent::div/preceding-sibling::div  let $a2 := if ($p2) then count($an2) + 1 else ()  let $p3 := $p2/parent::div let $an3 := $p2/parent::div/preceding-sibling::div let $a3 := if ($p3) then count($an3) + 1 else ()  let $p4 := $p3/parent::div let $an4 := $p3/parent::div/preceding-sibling::div let $a4 := if ($p3) then count($an4) + 1 else () return  string-join(($a3, $a2, $a1, $pr), '.')"/>
-            <param name="id" value="substring-after(@target, '#')"/>
-            <param name="label" value="id(substring-after(@target, '#'), root($parameters?root))/head[1]/string()"/>
-            <param name="space" value="' '"/>
-            <pb:template xmlns="" xml:space="preserve"><pb-link xml-id="[[id]]" emit="transcription">[[div]] [[space]] [[label]]</pb-link></pb:template>
-        </model>
+                    <modelSequence predicate="starts-with(@target, '#')">
+            <model predicate="@type = 'cit'" behaviour="inline" cssClass="inner-ref">
+                <param name="id" value="substring-after(@target, '#')"/>
+                <param name="label" value="id(substring-after(@target, '#'), root($parameters?root))"/>
+                <pb:template xmlns="" xml:space="preserve"><pb-link xml-id="[[id]]" emit="transcription">[[label]]</pb-link></pb:template>
+            </model>
+            <model behaviour="inline" cssClass="inner-ref">
+                <param name="div" value="let $div := id(substring-after(@target, '#'), root($parameters?root))  let $pr := count($div/preceding-sibling::div) + 1  let $p1 := $div/parent::div let $an1 := $div/parent::div/preceding-sibling::div let $a1 := if ($p1) then count($an1) + 1 else ()  let $p2 := $p1/parent::div let $an2 := $p1/parent::div/preceding-sibling::div  let $a2 := if ($p2) then count($an2) + 1 else ()  let $p3 := $p2/parent::div let $an3 := $p2/parent::div/preceding-sibling::div let $a3 := if ($p3) then count($an3) + 1 else ()  let $p4 := $p3/parent::div let $an4 := $p3/parent::div/preceding-sibling::div let $a4 := if ($p3) then count($an4) + 1 else () return  string-join(($a3, $a2, $a1, $pr), '.')"/>
+                <param name="id" value="substring-after(@target, '#')"/>
+                <param name="label" value="id(substring-after(@target, '#'), root($parameters?root))/head[1]/string()"/>
+                <param name="space" value="' '"/>
+                <pb:template xmlns="" xml:space="preserve"><pb-link xml-id="[[id]]" emit="transcription">[[div]] [[space]] [[label]]</pb-link></pb:template>
+            </model>
+        </modelSequence>
                     <model predicate="@target and string(.)=''" behaviour="inline">
             <param name="target" value="@target"/>
             <pb:template xmlns="" xml:space="preserve"><a href="[[target]]">[[target]]</a></pb:template>
@@ -158,6 +165,12 @@
                     <model behaviour="inline"/>
                 </elementSpec>
             <elementSpec ident="div" mode="change">
+                    <model predicate="$parameters?mode='toc' and ancestor::body" behaviour="block">
+            <param name="label" value="head/string()"/>
+            <param name="id" value="@xml:id"/>
+            <param name="number" value="let $div := $get(.)  let $pr := count($div/preceding-sibling::div) + 1  let $p1 := $div/parent::div let $an1 := $div/parent::div/preceding-sibling::div let $a1 := if ($p1) then count($an1) + 1 else ()  let $p2 := $p1/parent::div let $an2 := $p1/parent::div/preceding-sibling::div  let $a2 := if ($p2) then count($an2) + 1 else ()  let $p3 := $p2/parent::div let $an3 := $p2/parent::div/preceding-sibling::div let $a3 := if ($p3) then count($an3) + 1 else ()  let $p4 := $p3/parent::div let $an4 := $p3/parent::div/preceding-sibling::div let $a4 := if ($p3) then count($an4) + 1 else () let $number:=  string-join(($a3, $a2, $a1, $pr), '.')  return ($number, ' ')"/>
+            <pb:template xmlns="" xml:space="preserve"><a href="p5.xml?id=[[id]]">[[number]][[label]]</a></pb:template>
+        </model>
                     <model predicate="$parameters?mode='toc'" behaviour="block">
             <param name="label" value="head/string()"/>
             <param name="id" value="@xml:id"/>
@@ -261,8 +274,8 @@
             <desc>display as document title for Guidelines reading view</desc>
             <param name="title" value="string-join(root(.)//text/front//docTitle//title)"/>
             <param name="version" value=".//editionStmt/edition"/>
-            <pb:template xmlns="" xml:space="preserve"><div>
-  <h2>[[title]]</h2>
+            <pb:template xmlns="" xml:space="preserve"><div class="title">
+  <h2 class="title">[[title]]</h2>
   [[version]]
 </div></pb:template>
         </model>
