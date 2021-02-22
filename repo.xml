@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <meta xmlns="http://exist-db.org/xquery/repo">
     <description>TEI Guidelines</description>
-    <author/>
+    <author>TEI Publisher authors</author>
     <status>beta</status>
     <license>GNU-LGPL</license>
     <copyright>true</copyright>
@@ -9,6 +9,6 @@
     <prepare>pre-install.xql</prepare>
     <finish>post-install.xql</finish>
     <target>guidelines</target>
-    <permissions user="tei" group="tei" mode="rw-r--r--"/>
+    <permissions user="guidelines" group="tei" password="guidelines" mode="rw-r--r--"/>
     <deployed>2021-02-01T21:00:05.833+01:00</deployed>
 </meta>

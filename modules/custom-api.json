@@ -25,53 +25,61 @@
         }
     },
     "paths": {
-        "/api/ref/{id}/html": {
+        "/ref/{id}": {
             "get": {
-                "summary": "Retrieve reference section content as HTML",
-                "description": "Retrieve a reference section (on element, model or attribute class) transformed to HTML via ODD",
-                "tags": [
-                    "documents"
-                ],
-                "operationId": "rapi:html",
+                "summary": "Retrieve the reference page for a given ident",
+                "tags": [ "view" ],
+                "operationId": "vapi:view",
+                
                 "parameters": [
                     {
-                        "name": "id",
-                        "in": "path",
+                        "name": "doc",
+                        "in": "query",
+                        "description": "Guidelines document",
                         "required": true,
                         "schema": {
                             "type": "string",
-                            "example": "test/F-rom.xml"
-                        }
+                            "default": "p5.xml"
+                        },
+                        "allowReserved": true
                     },
                     {
-                        "name": "odd",
+                        "name": "template",
                         "in": "query",
-                        "schema": {
+                        "description": "Name of the template to be used. Overwrites any default template setting.",
+                        "schema":{
                             "type": "string",
-                            "example": "shakespeare.odd"
+                            "default": "ref.html"
                         }
                     },
                     {
-                        "name": "base",
-                        "description": "Base URI to use",
-                        "in": "query",
+                        "name": "id",
+                        "in": "path",
+                        "description": "Identifier to show reference page for",
                         "schema": {
                             "type": "string"
                         }
                     },
                     {
-                        "name": "wc",
-                        "description": "Include TEI Publisher webcomponents",
+                        "name": "view",
                         "in": "query",
                         "schema": {
-                            "type": "boolean",
-                            "default": true
+                            "type": "string",
+                            "default": "single"
+                        },
+                        "description": "The view type used by the main view which displays the document, e.g. 'page' or 'div'. This has an influence on the generated links, which need to differ when linking to a page rather than a section."
+                    },
+                    {
+                        "name": "odd",
+                        "in": "query",
+                        "schema":{
+                            "type": "string"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Returns the entire reference section as HTML",
+                        "description": "HTML view for the reference page",
                         "content": {
                             "text/html": {
                                 "schema": {
@@ -81,11 +89,21 @@
                         }
                     },
                     "404": {
-                        "description": "Specification not found",
+                        "description": "Specification was not found",
                         "content": {
-                            "application/json": {
+                            "text/html": {
                                 "schema": {
-                                    "type": "object"
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "An error occurred",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "type": "string"
                                 }
                             }
                         }
