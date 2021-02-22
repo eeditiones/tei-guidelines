@@ -65,7 +65,7 @@
                 <param name="id" value="substring-after(@target, '#')"/>
                 <param name="label" value="id(substring-after(@target, '#'), root($parameters?root))/head[1]/string()"/>
                 <param name="space" value="' '"/>
-                <pb:template xmlns="" xml:space="preserve"><pb-link class="inner-ref" xml-id="[[id]]">[[div]] [[space]] [[label]]</pb-link></pb:template>
+                <pb:template xmlns="" xml:space="preserve"><pb-link class="inner-ref" xml-id="[[id]]" hash="[[id]]" emit="transcription">[[div]] [[space]] [[label]]</pb-link></pb:template>
             </model>
         </modelSequence>
                     <model predicate="@target and string(.)=''" behaviour="inline">
@@ -108,10 +108,16 @@
             font-weight: bold;
             </outputRendition>
         </model>
-                    <model predicate="parent::div" behaviour="heading">
-            <param name="level" value="count(ancestor::div)"/>
-            <param name="content" value="let $div := $get(.)/parent::div   return (ec:heading-number($div),' ', .)"/>
-        </model>
+                    <modelSequence predicate="parent::div">
+            <model predicate="&lt;a name=&#34;#[[id]]&#34;/&gt;" behaviour="passthrough">
+                <param name="id" value="parent::div/@xml:id"/>
+                <param name="content" value="()"/>
+            </model>
+            <model behaviour="heading">
+                <param name="level" value="count(ancestor::div)"/>
+                <param name="content" value="let $div := $get(.)/parent::div   return (ec:heading-number($div),' ', .)"/>
+            </model>
+        </modelSequence>
                     <model behaviour="block"/>
                 </elementSpec>
                 <elementSpec ident="specDesc" mode="add">
