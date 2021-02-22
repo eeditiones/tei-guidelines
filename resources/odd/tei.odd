@@ -192,25 +192,26 @@
                     <model behaviour="block"/>
                 </elementSpec>
             <elementSpec ident="elementSpec" mode="add">
-                    <model predicate="$parameters?spec='element'" behaviour="block">
+                    <model predicate="$parameters?spec='element'" behaviour="passthrough">
             <param name="ident" value="@ident"/>
             <param name="gloss" value="gloss[@xml:lang=$parameters?lng]"/>
             <param name="lng" value="'en'"/>
-            <param name="desc" value="desc[@xml:lang=$parameters?lng]"/>
+            <param name="desc" value="(' ', desc[@xml:lang=$parameters?lng])"/>
             <param name="heading" value="@ident"/>
             <param name="content" value="content"/>
             <param name="members" value="for $i in classes/memberOf[not(starts-with(@key, 'att'))] let $n := $i/@key order by $n return $i"/>
             <param name="module" value="@module"/>
             <param name="attributes" value="attList"/>
             <param name="example" value="exemplum[@xml:lang=$parameters?lng]"/>
-            <param name="attClass" value="for $i in classes/memberOf[starts-with(@key, 'att')] let $n := $i/@key order by $n return $i"/>
+            <param name="attClass" value="for $i in classes/memberOf[starts-with(@key, 'att')] let $n := $i/@key order by $n return &lt;item&gt;{$i}&lt;/item&gt;"/>
             <param name="links" value="if (listRef/ptr) then (' [', listRef/ptr, ']') else ()"/>
             <pb:template xmlns="" xml:space="preserve"><div class="element-spec">
   <h3>[[ident]]</h3>
   <table>
     <tr><td colspan="2"><b>[[gloss]]</b> [[desc]] [[links]]</td></tr>
     <tr><td>Module</td><td>[[module]]</td></tr>
-    <tr><td>Attributes</td><td><div>[[attClass]] [[attributes]]</div></td></tr>
+    <tr><td>Attributes</td><td><dl>[[attClass]]</dl></td></tr>
+    <tr><td/><td>[[attributes]]</td></tr>
     <tr><td>Member of</td><td>[[members]]</td></tr>
     <tr><td>Contained by</td><td>TODO</td></tr>
     <tr><td>May contain</td><td>TODO</td></tr>
@@ -238,15 +239,21 @@
         </model>
                 </elementSpec>
                 <elementSpec ident="attDef" mode="add">
-                    <model predicate="$parameters?mode='ref'" behaviour="block">
+                    <model predicate="$parameters?mode='ref'" behaviour="passthrough">
             <desc>display in reference pages</desc>
             <param name="name" value="@ident"/>
             <param name="desc" value="desc[@xml:lang=$parameters?lng]"/>
             <param name="usage" value="@usage"/>
             <param name="datatype" value="datatype/dataRef/@key"/>
-            <pb:template xmlns="" xml:space="preserve"><tr><td><dl><dt>@[[name]]</dt> <dd>[[desc]]</dd></dl></td></tr>
-<tr><td><dl><dt>Usage</dt> <dd>[[usage]]</dd></dl>
-  <dl><dt>Datatype</dt> <dd>[[datatype]]</dd></dl></td></tr></pb:template>
+            <pb:template xmlns="" xml:space="preserve"><dl>
+  <dt>@[[name]]</dt>
+  <dd>[[desc]]
+    <dl>
+  		<dt>Usage</dt> <dd>[[usage]]</dd>
+  		<dt>Datatype</dt> <dd>[[datatype]]</dd>
+    </dl>
+  </dd>
+</dl></pb:template>
         </model>
                     <model behaviour="block" cssClass="attribute">
             <desc>display in the Guidelines text</desc>
