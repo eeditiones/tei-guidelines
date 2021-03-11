@@ -37,7 +37,14 @@ declare function nav:get-header($config as map(*), $node as element()) {
 
 declare function nav:get-section-for-node($config as map(*), $node as element()) {
     let $s := $node/ancestor-or-self::tei:div[count(ancestor::tei:div) < $config?depth][1]
-    return if($s) then $s else  ($node/ancestor-or-self::tei:body, $node/ancestor-or-self::tei:front, $node/ancestor-or-self::tei:back)[1]
+    return 
+        if($s) then 
+            $s 
+        else  
+            ($node/ancestor-or-self::tei:body, 
+            $node/ancestor-or-self::tei:front, 
+            $node/ancestor-or-self::tei:back, 
+            $node/ancestor-or-self::tei:text)[1]
 };
 
 declare function nav:get-section($config as map(*), $doc) {

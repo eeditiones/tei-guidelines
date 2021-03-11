@@ -51,7 +51,7 @@
                 <param name="id" value="substring-after(@target, '#')"/>
                 <param name="label" value="id(substring-after(@target, '#'), root($parameters?root))/head[1]/string()"/>
                 <param name="space" value="' '"/>
-                <pb:template xmlns="" xml:space="preserve"><a href="p5.xml?id=[[id]]" class="inner-ref">FOO BAR[[div]] [[space]] [[label]]</a></pb:template>
+                <pb:template xmlns="" xml:space="preserve"><a href="p5.xml?id=[[id]]" class="inner-ref">[[div]] [[space]] [[label]]</a></pb:template>
             </model>
         </modelSequence>
                     <modelSequence predicate="starts-with(@target, '#')">
@@ -217,21 +217,21 @@
             <param name="members" value="for $i in classes/memberOf[not(starts-with(@key, 'att'))] let $n := $i/@key order by $n return $i"/>
             <param name="module" value="@module"/>
             <param name="attributes" value="attList"/>
-            <param name="example" value="exemplum[@xml:lang=$parameters?lng]"/>
+            <param name="example" value="(exemplum[@xml:lang=$parameters?lng], exemplum)[1]"/>
             <param name="attClass" value="for $i in classes/memberOf[starts-with(@key, 'att')] let $n := $i/@key order by $n return &lt;item&gt;{$i}&lt;/item&gt;"/>
             <param name="links" value="if (listRef/ptr) then (' [', listRef/ptr, ']') else ()"/>
             <pb:template xmlns="" xml:space="preserve"><div class="element-spec">
   <h3>[[ident]]</h3>
   <table>
     <tr><td colspan="2"><b>[[gloss]]</b> [[desc]] [[links]]</td></tr>
-    <tr><td>Module</td><td>[[module]]</td></tr>
-    <tr><td>Attributes</td><td><dl>[[attClass]]</dl></td></tr>
+    <tr><td>Module</td><td>[[module]] TODO Module name</td></tr>
+    <tr><td>Attributes</td><td><dl>[[attClass]] TODO Expand attribute classes</dl></td></tr>
     <tr><td/><td>[[attributes]]</td></tr>
     <tr><td>Member of</td><td>[[members]]</td></tr>
     <tr><td>Contained by</td><td>TODO</td></tr>
     <tr><td>May contain</td><td>TODO</td></tr>
     <tr><td>Example</td><td>[[example]]</td></tr>
-    <tr><td>Content model</td><td>TOFIX [[content]]</td></tr>
+    <tr><td>Content model</td><td>[[content]]</td></tr>
     <tr><td>Schema declaration</td><td>TODO</td></tr>
 </table>
 </div></pb:template>
@@ -239,12 +239,8 @@
                 </elementSpec>
                 <elementSpec ident="content" mode="add">
                     <model predicate="$parameters?mode='ref'" behaviour="block">
-            <param name="content" value="serialize(.,                     &lt;output:serialization-parameters xmlns:output=&#34;http://www.w3.org/2010/xslt-xquery-serialization&#34;&gt;                       &lt;output:indent&gt;yes&lt;/output:indent&gt;                     &lt;/output:serialization-parameters&gt;)"/>
-            <pb:template xmlns="" xml:space="preserve"><pb-code-highlight language="xml" theme="solarizedlight">
-  <template>
-    [[content]]
-  </template>
-</pb-code-highlight></pb:template>
+            <param name="content" value="replace(serialize(., map {&#34;indent&#34;: true()}), ' xmlns=&#34;http://www.tei-c.org/ns/1.0&#34;', '')"/>
+            <pb:template xmlns="" xml:space="preserve"><pb-code-highlight language="xml" theme="solarizedlight">[[content]]</pb-code-highlight></pb:template>
         </model>
                 </elementSpec>
                 <elementSpec ident="memberOf" mode="add">
@@ -260,6 +256,7 @@
             <param name="desc" value="desc[@xml:lang=$parameters?lng]"/>
             <param name="usage" value="@usage"/>
             <param name="datatype" value="datatype/dataRef/@key"/>
+            <param name="exemplum" value="(exemplum[@xml:lang=$parameters?lng], exemplum)[1]"/>
             <pb:template xmlns="" xml:space="preserve"><dl>
   <dt>@[[name]]</dt>
   <dd>[[desc]]
@@ -268,6 +265,7 @@
   		<dt>Datatype</dt> <dd>[[datatype]]</dd>
     </dl>
   </dd>
+  [[exemplum]]
 </dl></pb:template>
         </model>
                     <model behaviour="block" cssClass="attribute">
@@ -376,6 +374,46 @@
             <outputRendition xml:space="preserve">
             text-align: center;
             </outputRendition>
+        </model>
+                </elementSpec>
+            <elementSpec ident="classSpec" mode="add">
+                    <model predicate="$parameters?mode='ref' and starts-with(@ident, 'model.')" behaviour="inline">
+            <param name="ident" value="@ident"/>
+            <param name="gloss" value="gloss[@xml:lang=$parameters?lng]"/>
+            <param name="desc" value="(' ', desc[@xml:lang=$parameters?lng])"/>
+            <param name="links" value="if (listRef/ptr) then (' [', listRef/ptr, ']') else ()"/>
+            <param name="module" value="@module"/>
+            <param name="lng" value="'en'"/>
+            <pb:template xmlns="" xml:space="preserve"><div class="element-spec">
+  <h3>[[ident]]</h3>
+  <table>
+    <tr><td colspan="2"><b>[[gloss]]</b> [[desc]] [[links]]</td></tr>
+    <tr><td>Module</td><td>[[module]] TODO Module name</td></tr>
+    <tr><td>Used by</td><td><dl>TODO</dl></td></tr>
+    <tr><td>Members</td><td>TODO</td></tr>
+</table>
+</div></pb:template>
+        </model>
+                    <model predicate="$parameters?mode='ref' and starts-with(@ident, 'att.')" behaviour="passthrough">
+            <param name="gloss" value="gloss[@xml:lang=$parameters?lng]"/>
+            <param name="desc" value="(' ', desc[@xml:lang=$parameters?lng])"/>
+            <param name="links" value="if (listRef/ptr) then (' [', listRef/ptr, ']') else ()"/>
+            <param name="module" value="@module"/>
+            <param name="members" value="'members'"/>
+            <param name="attClass" value="for $i in classes/memberOf[starts-with(@key, 'att')] let $n := $i/@key order by $n return &lt;item&gt;{$i}&lt;/item&gt;"/>
+            <param name="attributes" value="attList"/>
+            <param name="ident" value="@ident"/>
+            <param name="lng" value="'en'"/>
+            <pb:template xmlns="" xml:space="preserve"><div class="element-spec">
+  <h3>[[ident]]</h3>
+  <table>
+    <tr><td colspan="2"><b>[[gloss]]</b> [[desc]] [[links]]</td></tr>
+    <tr><td>Module</td><td>[[module]] TODO Module name</td></tr>
+    <tr><td>Members</td><td>[[members]]</td></tr>
+    <tr><td>Attributes</td><td><dl>[[attClass]]</dl></td></tr>
+    <tr><td/><td>[[attributes]]</td></tr>
+</table>
+</div></pb:template>
         </model>
                 </elementSpec>
             </schemaSpec>
