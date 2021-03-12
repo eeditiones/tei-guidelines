@@ -214,12 +214,12 @@
             <param name="desc" value="(' ', desc[@xml:lang=$parameters?lng])"/>
             <param name="heading" value="@ident"/>
             <param name="content" value="content"/>
+            <param name="containedBy" value="classes"/>
             <param name="members" value="for $i in classes/memberOf[not(starts-with(@key, 'att'))] let $n := $i/@key order by $n return $i"/>
             <param name="module" value="@module"/>
             <param name="attributes" value="attList"/>
             <param name="example" value="(exemplum[@xml:lang=$parameters?lng], exemplum)[1]"/>
             <param name="attClass" value="for $i in classes/memberOf[starts-with(@key, 'att')] let $n := $i/@key order by $n return &lt;item&gt;{$i}&lt;/item&gt;"/>
-            <param name="links" value="if (listRef/ptr) then (' [', listRef/ptr, ']') else ()"/>
             <pb:template xmlns="" xml:space="preserve"><div class="element-spec">
   <h3>[[ident]]</h3>
   <table>
@@ -228,7 +228,7 @@
     <tr><td>Attributes</td><td><dl>[[attClass]] TODO Expand attribute classes</dl></td></tr>
     <tr><td/><td>[[attributes]]</td></tr>
     <tr><td>Member of</td><td>[[members]]</td></tr>
-    <tr><td>Contained by</td><td>TODO</td></tr>
+    <tr><td>Contained by</td><td>[[containedBy]]</td></tr>
     <tr><td>May contain</td><td>TODO</td></tr>
     <tr><td>Example</td><td>[[example]]</td></tr>
     <tr><td>Content model</td><td>[[content]]</td></tr>
@@ -415,6 +415,9 @@
 </table>
 </div></pb:template>
         </model>
+                </elementSpec>
+            <elementSpec ident="classes" mode="add">
+                    <model behaviour="contained-by"/>
                 </elementSpec>
             </schemaSpec>
         </body>
