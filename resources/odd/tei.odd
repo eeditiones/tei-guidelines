@@ -390,11 +390,12 @@
             <param name="links" value="if (listRef/ptr) then (' [', listRef/ptr, ']') else ()"/>
             <param name="module" value="@module"/>
             <param name="lng" value="'en'"/>
+            <param name="moduleName" value="let $module := @module   let $spec := root(.)//moduleSpec[@ident=$module]  return $spec/desc"/>
             <pb:template xmlns="" xml:space="preserve"><div class="element-spec">
   <h3>[[ident]]</h3>
   <table>
     <tr><td colspan="2"><b>[[gloss]]</b> [[desc]] [[links]]</td></tr>
-    <tr><td>Module</td><td>[[module]] TODO Module name</td></tr>
+    <tr><td>Module</td><td>[[module]] — [[moduleName]]</td></tr>
     <tr><td>Used by</td><td><dl>TODO</dl></td></tr>
     <tr><td>Members</td><td>TODO</td></tr>
 </table>
@@ -410,14 +411,15 @@
             <param name="attributes" value="attList"/>
             <param name="ident" value="@ident"/>
             <param name="lng" value="'en'"/>
+            <param name="moduleName" value="let $module := @module   let $spec := root(.)//moduleSpec[@ident=$module]  return $spec/desc"/>
             <pb:template xmlns="" xml:space="preserve"><div class="element-spec">
   <h3>[[ident]]</h3>
   <table>
     <tr><td colspan="2"><b>[[gloss]]</b> [[desc]] [[links]]</td></tr>
-    <tr><td>Module</td><td>[[module]] TODO Module name</td></tr>
+    <tr><td>Module</td><td>[[module]] — [[moduleName]]</td></tr>
     <tr><td>Members</td><td>[[members]]</td></tr>
     <tr><td>Attributes</td><td><dl>[[attClass]]</dl></td></tr>
-    <tr><td/><td>[[attributes]]</td></tr>
+    [[attributes]]
 </table>
 </div></pb:template>
         </model>
