@@ -229,7 +229,7 @@
     <tr><td/><td>[[attributes]]</td></tr>
     <tr><td>Member of</td><td>[[members]]</td></tr>
     <tr><td>Contained by</td><td>[[containedBy]]</td></tr>
-    <tr><td>May contain</td><td>TODO</td></tr>
+    <tr><td>May contain</td><td>[[content]]</td></tr>
     <tr><td>Example</td><td>[[example]]</td></tr>
     <tr><td>Content model</td><td>[[content]]</td></tr>
     <tr><td>Schema declaration</td><td>TODO</td></tr>
@@ -238,10 +238,11 @@
         </model>
                 </elementSpec>
                 <elementSpec ident="content" mode="add">
-                    <model predicate="$parameters?mode='ref'" behaviour="block">
+                    <model predicate="$parameters?mode='source'" behaviour="block">
             <param name="content" value="replace(serialize(., map {&#34;indent&#34;: true()}), ' xmlns=&#34;http://www.tei-c.org/ns/1.0&#34;', '')"/>
             <pb:template xmlns="" xml:space="preserve"><pb-code-highlight language="xml" theme="solarizedlight">[[content]]</pb-code-highlight></pb:template>
         </model>
+                    <model behaviour="may-contain"/>
                 </elementSpec>
                 <elementSpec ident="memberOf" mode="add">
                     <model predicate="$parameters?mode='ref'" behaviour="link">

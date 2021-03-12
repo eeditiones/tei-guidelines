@@ -44,6 +44,71 @@ declare function pmf:contained-by($config as map(*), $node as element(), $class 
         </div>
 };
 
+declare function pmf:class-members($classes as xs:string*, $root as document-node()) {
+    for $class in $classes
+    return (
+        $root//tei:elementSpec[tei:classes/tei:memberOf/@key = $class],
+        pmf:class-members($root//tei:classSpec[tei:classes/tei:memberOf[@key = $class]]/@ident, $root)
+    )
+};
+
+declare function pmf:contains-elements($contents as element()*) {
+    for $content in $contents
+    return 
+        typeswitch($content)
+            case element(tei:elementRef) return
+                root($content)//tei:elementSpec[@ident=$content/@key]
+            case element(tei:classRef) return
+                pmf:class-members($content/@key, root($content))
+            case element(tei:macroRef) return
+                let $macroSpec := root($content)//tei:macroSpec[@ident = $content/@key]
+                return
+                    pmf:contains-elements($macroSpec/tei:content)
+            case element(tei:textNode) return
+                <textNode></textNode>
+            case element() return
+                pmf:contains-elements($content/*)
+            default return
+                ()
+};
+
+declare function pmf:may-contain($config as map(*), $node as element(), $class as xs:string+, $content as node()*) {
+    let $elemSpecs := pmf:contains-elements($content)
+    return (
+        for $specs in $elemSpecs[@module]
+        group by $module := $specs/@module
+        order by $module
+        return
+            <div class="module">
+                <h4>{$module/string()}</h4>:
+                <ul>
+                {
+                    for $spec in $specs
+                    let $ident := $spec/@ident/string()
+                    order by $ident
+                    return
+                        <li><a href="ref/{$ident}">{$ident}</a></li>
+                }
+                </ul>
+            </div>,
+        for $spec in $elemSpecs[not(@module)]
+        return
+            <div class="module">Character Data</div>
+    )
+};
+
+declare function pmf:delegate($config as map(*), $node as element(), $class as xs:string+, $content as node()*, $param as xs:string,
+    $value as xs:string) {
+    let $newConfig := map:merge((
+        $config,
+        map {
+            "parameters": map:merge(($config?parameters, map { $param : $value }))
+        }
+    ))
+    return
+        $config?apply($newConfig, $node)
+};
+
 declare function pmf:passthrough($config as map(*), $node as element(), $class as xs:string+, $content as node()*) {
     $config?apply-children($config, $node, $content)
 };
