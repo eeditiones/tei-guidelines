@@ -210,7 +210,6 @@
                     <model predicate="$parameters?mode='ref'" behaviour="passthrough">
             <param name="ident" value="@ident"/>
             <param name="gloss" value="gloss[@xml:lang=$parameters?lng]"/>
-            <param name="lng" value="'en'"/>
             <param name="desc" value="(' ', desc[@xml:lang=$parameters?lng])"/>
             <param name="heading" value="@ident"/>
             <param name="content" value="content"/>
@@ -220,20 +219,25 @@
             <param name="attributes" value="attList"/>
             <param name="example" value="(exemplum[@xml:lang=$parameters?lng], exemplum)[1]"/>
             <param name="attClass" value="for $i in classes/memberOf[starts-with(@key, 'att')] let $n := $i/@key order by $n return &lt;item&gt;{$i}&lt;/item&gt;"/>
-            <param name="moduleName" value="let $module := @module  let $spec := root(.)//moduleSpec[@ident=$module] return ($spec/desc[@xml:lang=$parameters?lng], $spec/desc)[1]"/>
+            <param name="moduleName" value="let $module := @module   let $spec := root(.)//moduleSpec[@ident=$module]  return $spec/desc"/>
+            <param name="remarks" value="(remarks[@xml:lang=$parameters?lng], remarks)[1]"/>
+            <param name="lng" value="'en'"/>
             <pb:template xmlns="" xml:space="preserve"><div class="element-spec">
   <h3>[[ident]]</h3>
   <table>
     <tr><td colspan="2"><b>[[gloss]]</b> [[desc]] [[links]]</td></tr>
-    <tr><td>Module</td><td>[[module]] [[moduleName]]</td></tr>
+    <tr><td>Module</td><td>[[module]] — [[moduleName]]</td></tr>
     <tr><td>Attributes</td><td><dl>[[attClass]] TODO Expand attribute classes</dl></td></tr>
-    <tr><td/><td>[[attributes]]</td></tr>
+    [[attributes]]
     <tr><td>Member of</td><td>[[members]]</td></tr>
     <tr><td>Contained by</td><td>[[containedBy]]</td></tr>
     <tr><td>May contain</td><td>[[content]]</td></tr>
+    [[remarks]]
     <tr><td>Example</td><td>[[example]]</td></tr>
+    <!--
     <tr><td>Content model</td><td>[[content]]</td></tr>
     <tr><td>Schema declaration</td><td>TODO</td></tr>
+-->
 </table>
 </div></pb:template>
         </model>
@@ -420,6 +424,18 @@
                 </elementSpec>
             <elementSpec ident="classes" mode="add">
                     <model behaviour="contained-by"/>
+                </elementSpec>
+            <elementSpec ident="attList" mode="add">
+                    <model behaviour="passthrough">
+            <param name="attributes" value="."/>
+            <pb:template xmlns="" xml:space="preserve"><tr><td/><td>[[attributes]]</td></tr></pb:template>
+        </model>
+                </elementSpec>
+                <elementSpec ident="remarks" mode="add">
+                    <model predicate="$parameters?mode='ref'" behaviour="passthrough">
+            <param name="remarks" value="."/>
+            <pb:template xmlns="" xml:space="preserve"><tr><td>Note</td><td>[[remarks]]</td></tr></pb:template>
+        </model>
                 </elementSpec>
             </schemaSpec>
         </body>
