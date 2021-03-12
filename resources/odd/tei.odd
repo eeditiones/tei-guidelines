@@ -220,11 +220,12 @@
             <param name="attributes" value="attList"/>
             <param name="example" value="(exemplum[@xml:lang=$parameters?lng], exemplum)[1]"/>
             <param name="attClass" value="for $i in classes/memberOf[starts-with(@key, 'att')] let $n := $i/@key order by $n return &lt;item&gt;{$i}&lt;/item&gt;"/>
+            <param name="moduleName" value="let $module := @module  let $spec := root(.)//moduleSpec[@ident=$module] return ($spec/desc[@xml:lang=$parameters?lng], $spec/desc)[1]"/>
             <pb:template xmlns="" xml:space="preserve"><div class="element-spec">
   <h3>[[ident]]</h3>
   <table>
     <tr><td colspan="2"><b>[[gloss]]</b> [[desc]] [[links]]</td></tr>
-    <tr><td>Module</td><td>[[module]] TODO Module name</td></tr>
+    <tr><td>Module</td><td>[[module]] [[moduleName]]</td></tr>
     <tr><td>Attributes</td><td><dl>[[attClass]] TODO Expand attribute classes</dl></td></tr>
     <tr><td/><td>[[attributes]]</td></tr>
     <tr><td>Member of</td><td>[[members]]</td></tr>
