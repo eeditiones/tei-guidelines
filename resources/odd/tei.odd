@@ -219,7 +219,7 @@
             <param name="module" value="@module"/>
             <param name="attributes" value="attList"/>
             <param name="example" value="(exemplum[@xml:lang=$parameters?lng], exemplum)[1]"/>
-            <param name="attClass" value="for $i in classes/memberOf[starts-with(@key, 'att')] let $n := $i/@key order by $n return &lt;item&gt;{$i}&lt;/item&gt;"/>
+            <param name="attClass" value="for $i in classes/memberOf[starts-with(@key, 'att')]  let $n := $i/@key   let $classSpec := root($parameters?root)//classSpec[@ident=$n] let $exp := ec:expand-attributes($classSpec) return &lt;item&gt;{$exp}&lt;/item&gt;"/>
             <param name="moduleName" value="let $module := @module  let $spec := root($parameters?root)//moduleSpec[@ident=$module] return $spec/desc"/>
             <param name="remarks" value="(remarks[@xml:lang=$parameters?lng], remarks)[1]"/>
             <param name="mayContain" value="content"/>
@@ -229,8 +229,7 @@
   <table>
     <tr><td colspan="2"><span class="ident">[[ident]]</span> <b>[[gloss]]</b> [[desc]] [[links]]</td></tr>
     <tr><td>Module</td><td>[[module]] — [[moduleName]]</td></tr>
-    <tr><td>Attributes</td><td><dl>[[attClass]] TODO Expand attribute classes</dl></td></tr>
-    [[attributes]]
+    <tr><td>Attributes</td><td><dl>[[attClass]]</dl>[[attributes]]</td></tr>
     <tr><td>Member of</td><td>[[members]]</td></tr>
     <tr><td>Contained by</td><td>[[containedBy]]</td></tr>
     <tr><td>May contain</td><td>[[mayContain]]</td></tr>
@@ -421,8 +420,7 @@
     <tr><td colspan="2"><b>[[gloss]]</b> [[desc]] [[links]]</td></tr>
     <tr><td>Module</td><td>[[module]] — [[moduleName]]</td></tr>
     <tr><td>Members</td><td>[[members]]</td></tr>
-    <tr><td>Attributes</td><td><dl>[[attClass]]</dl></td></tr>
-    [[attributes]]
+    <tr><td>Attributes</td><td><dl>[[attClass]]</dl>[[attributes]]</td></tr>   
 </table>
 </div></pb:template>
         </model>
@@ -436,12 +434,7 @@
             <pb:template xmlns="" xml:space="preserve"><tr><td>Note</td><td>[[content]]</td></tr></pb:template>
         </model>
                 </elementSpec>
-                <elementSpec ident="attList" mode="add">
-                    <model predicate="$parameters?mode='ref'" behaviour="passthrough">
-            <param name="attributes" value="."/>
-            <pb:template xmlns="" xml:space="preserve"><tr><td/><td>[[attributes]]</td></tr></pb:template>
-        </model>
-                </elementSpec>
+                <elementSpec ident="attList" mode="add"/>
                 <elementSpec ident="code" mode="change">
                     <model behaviour="passthrough">
             <param name="content" value="./node()"/>

@@ -87,3 +87,7 @@ a:hover {
 .ident::after {
     content: '>';
  }
+
+ .tei-item {
+     list-style: none;
+ }

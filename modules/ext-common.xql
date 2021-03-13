@@ -20,3 +20,16 @@ declare function pmf:heading-number($div as node()*) {
     else
         count($div/preceding-sibling::tei:div) + 1
 };
+
+(: return a list of attributes per class, descend into other att classes :)
+declare function pmf:expand-attributes($classSpec as node()) {
+    let $refs := $classSpec//tei:attDef/@ident 
+    let $atts := string-join(for $r in $refs return '@' || $r, ', ') 
+    let $classes := 
+        for $c in $classSpec/tei:classes/tei:memberOf/@key[starts-with(., 'att.')]
+            let $cS := root($c)//tei:classSpec[@ident=$c] 
+            return (' (' , pmf:expand-attributes($cS) ,')' )
+            (: return $c/string() :)
+    return
+    (<ref xmlns="http://www.tei-c.org/ns/1.0" target="ref/{$classSpec/@ident/string()}"> {$classSpec/@ident/string()}</ref>, ' (', $atts, ')', $classes)
+};
