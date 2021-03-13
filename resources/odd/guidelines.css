@@ -80,3 +80,10 @@ a:hover {
 .module li::after {
     content: ' ';
 }
+
+.ident::before {
+   content: '<';
+}
+.ident::after {
+    content: '>';
+ }
