@@ -215,11 +215,11 @@
             <param name="heading" value="@ident"/>
             <param name="content" value="let $code := content return &lt;code&gt; {replace(serialize($code, map {&#34;indent&#34;: true()}), ' xmlns=&#34;http://www.tei-c.org/ns/1.0&#34;', '')}&lt;/code&gt;"/>
             <param name="containedBy" value="classes"/>
-            <param name="members" value="for $i in classes/memberOf[not(starts-with(@key, 'att'))] let $n := $i/@key order by $n return $i"/>
+            <param name="members" value="let $members:= for $i in classes/memberOf[not(starts-with(@key, 'att'))] let $n := $i/@key order by $n return $i return &lt;ref-cell&gt;{$members}&lt;/ref-cell&gt;"/>
             <param name="module" value="@module"/>
             <param name="attributes" value="attList"/>
             <param name="example" value="(exemplum[@xml:lang=$parameters?lng], exemplum)[1]"/>
-            <param name="attClass" value="for $i in classes/memberOf[starts-with(@key, 'att')]  let $n := $i/@key   let $classSpec := root($parameters?root)//classSpec[@ident=$n] let $exp := ec:expand-attributes($classSpec) return &lt;item&gt;{$exp}&lt;/item&gt;"/>
+            <param name="attClass" value="for $i in classes/memberOf[starts-with(@key, 'att')]   let $n := $i/@key    let $classSpec := root($parameters?root)//classSpec[@ident=$n]  let $exp := ec:expand-attributes($classSpec)  return &lt;item&gt;{$exp}&lt;/item&gt;"/>
             <param name="moduleName" value="let $module := @module  let $spec := root($parameters?root)//moduleSpec[@ident=$module] return $spec/desc"/>
             <param name="remarks" value="(remarks[@xml:lang=$parameters?lng], remarks)[1]"/>
             <param name="mayContain" value="content"/>
@@ -230,7 +230,7 @@
     <tr><td colspan="2"><span class="ident">[[ident]]</span> <b>[[gloss]]</b> [[desc]] [[links]]</td></tr>
     <tr><td>Module</td><td>[[module]] — [[moduleName]]</td></tr>
     <tr><td>Attributes</td><td><dl>[[attClass]]</dl>[[attributes]]</td></tr>
-    <tr><td>Member of</td><td>[[members]]</td></tr>
+    [[members]]
     <tr><td>Contained by</td><td>[[containedBy]]</td></tr>
     <tr><td>May contain</td><td>[[mayContain]]</td></tr>
     [[remarks]]
@@ -457,6 +457,12 @@
   <td>Schematron</td>
   <td>[[constraint]]</td>
 </tr></pb:template>
+        </model>
+                </elementSpec>
+            <elementSpec ident="ref-cell" mode="add">
+                    <model predicate="count(child::*)" behaviour="passthrough">
+            <param name="members" value="."/>
+            <pb:template xmlns="" xml:space="preserve"><tr><td>Member of</td><td>[[members]]</td></tr></pb:template>
         </model>
                 </elementSpec>
             </schemaSpec>
