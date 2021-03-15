@@ -436,11 +436,16 @@
                 </elementSpec>
                 <elementSpec ident="attList" mode="add"/>
                 <elementSpec ident="code" mode="change">
-                    <model behaviour="passthrough">
+                    <model predicate="$parameters?mode='ref'" behaviour="passthrough">
             <param name="content" value="./node()"/>
             <pb:template xmlns="" xml:space="preserve"><pb-code-highlight language="xml" theme="solarizedlight">[[content]]</pb-code-highlight></pb:template>
             <outputRendition xml:space="preserve">
-            font-family:monospace
+            font-family:monospace;
+            </outputRendition>
+        </model>
+                    <model behaviour="inline" cssClass="code">
+            <outputRendition xml:space="preserve">
+            font-family:monospace;
             </outputRendition>
         </model>
                 </elementSpec>
