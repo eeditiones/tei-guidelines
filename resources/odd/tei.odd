@@ -229,7 +229,7 @@
   <table>
     <tr><td colspan="2"><span class="ident">[[ident]]</span> <b>[[gloss]]</b> [[desc]] [[links]]</td></tr>
     <tr><td>Module</td><td>[[module]] — [[moduleName]]</td></tr>
-    <tr><td>Attributes</td><td><dl>[[attClass]]</dl>[[attributes]]</td></tr>
+    <tr><td>Attributes</td><td><dl class="att-class">[[attClass]]</dl>[[attributes]]</td></tr>
     [[members]]
     <tr><td>Contained by</td><td>[[containedBy]]</td></tr>
     <tr><td>May contain</td><td>[[mayContain]]</td></tr>
@@ -409,7 +409,7 @@
             <param name="links" value="if (listRef/ptr) then (' [', listRef/ptr, ']') else ()"/>
             <param name="module" value="@module"/>
             <param name="members" value="'members'"/>
-            <param name="attClass" value="for $i in classes/memberOf[starts-with(@key, 'att')] let $n := $i/@key order by $n return &lt;item&gt;{$i}&lt;/item&gt;"/>
+            <param name="attClass" value="for $i in classes/memberOf[starts-with(@key, 'att')]   let $n := $i/@key    let $classSpec := root($parameters?root)//classSpec[@ident=$n]  let $exp := ec:expand-attributes($classSpec)  return &lt;item&gt;{$exp}&lt;/item&gt;"/>
             <param name="attributes" value="attList"/>
             <param name="ident" value="@ident"/>
             <param name="lng" value="'en'"/>
@@ -420,7 +420,7 @@
     <tr><td colspan="2"><b>[[gloss]]</b> [[desc]] [[links]]</td></tr>
     <tr><td>Module</td><td>[[module]] — [[moduleName]]</td></tr>
     <tr><td>Members</td><td>[[members]]</td></tr>
-    <tr><td>Attributes</td><td><dl>[[attClass]]</dl>[[attributes]]</td></tr>   
+    <tr><td>Attributes</td><td><dl class="att-class">[[attClass]]</dl>[[attributes]]</td></tr>   
 </table>
 </div></pb:template>
         </model>
