@@ -24,7 +24,7 @@ declare function pmf:contained-by($config as map(*), $node as element(), $class 
         return
             root($content)//tei:elementSpec[tei:content//tei:classRef/@key = $class] |
             root($content)//tei:elementSpec[tei:content//tei:macroRef/@key = $macroSpec/@ident],
-        root($content)//tei:elementSpec[tei:content//tei:elementRef/@key = $content/parent::tei:elementSpec/@ident]
+        root($content)//tei:elementSpec[tei:content//tei:elementRef/@key = $content/ancestor::tei:elementSpec/@ident]
     )
     for $parents in $refs
     group by $module := $parents/@module
