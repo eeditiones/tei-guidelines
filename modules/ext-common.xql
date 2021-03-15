@@ -34,7 +34,7 @@ declare function pmf:expand-attributes($classSpec as node()) {
     (<ref xmlns="http://www.tei-c.org/ns/1.0" target="ref/{$classSpec/@ident/string()}"> {$classSpec/@ident/string()}</ref>, ' (', $atts, ')', $classes)
 };
 
-(: return a list of members of attribute class :)
+(: return a list of members of an attribute or model class :)
 declare function pmf:expand-members($classSpec as node()) {
     for $c in root($classSpec)//tei:elementSpec[.//tei:memberOf[@key=$classSpec/@ident]]
         let $i := $c/@ident
