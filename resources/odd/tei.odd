@@ -408,7 +408,7 @@
             <param name="desc" value="(' ', desc[@xml:lang=$parameters?lng])"/>
             <param name="links" value="if (listRef/ptr) then (' [', listRef/ptr, ']') else ()"/>
             <param name="module" value="@module"/>
-            <param name="members" value="'members'"/>
+            <param name="members" value="ec:expand-members(.)"/>
             <param name="attClass" value="for $i in classes/memberOf[starts-with(@key, 'att')]   let $n := $i/@key    let $classSpec := root($parameters?root)//classSpec[@ident=$n]  let $exp := ec:expand-attributes($classSpec)  return &lt;item&gt;{$exp}&lt;/item&gt;"/>
             <param name="attributes" value="attList"/>
             <param name="ident" value="@ident"/>
