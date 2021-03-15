@@ -479,6 +479,24 @@
             <param name="title" value="desc"/>
         </model>
                 </elementSpec>
+            <elementSpec ident="list" mode="change">
+                    <model predicate="@rend='numbered'" behaviour="list">
+            <param name="type" value="'ordered'"/>
+        </model>
+                    <model predicate="@rendition" behaviour="list" useSourceRendition="true">
+            <param name="content" value="item"/>
+        </model>
+                    <model predicate="not(@rendition)" behaviour="list">
+            <param name="content" value="item"/>
+        </model>
+                </elementSpec>
+                <elementSpec ident="term" mode="add">
+                    <model behaviour="inline">
+            <outputRendition xml:space="preserve">
+            font-style: italic;
+            </outputRendition>
+        </model>
+                </elementSpec>
             </schemaSpec>
         </body>
     </text>
