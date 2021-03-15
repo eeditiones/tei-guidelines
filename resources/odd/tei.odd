@@ -470,6 +470,15 @@
             <pb:template xmlns="" xml:space="preserve"><tr><td>Member of</td><td>[[members]]</td></tr></pb:template>
         </model>
                 </elementSpec>
+            <elementSpec ident="graphic" mode="change">
+                    <model behaviour="graphic">
+            <param name="url" value="'https://tei-c.org/release/doc/tei-p5-doc/en/html/' || @url"/>
+            <param name="width" value="@width"/>
+            <param name="height" value="@height"/>
+            <param name="scale" value="@scale"/>
+            <param name="title" value="desc"/>
+        </model>
+                </elementSpec>
             </schemaSpec>
         </body>
     </text>
