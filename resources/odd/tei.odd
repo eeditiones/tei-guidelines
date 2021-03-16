@@ -215,7 +215,7 @@
             <param name="heading" value="@ident"/>
             <param name="content" value="let $code := content return &lt;code&gt; {replace(serialize($code, map {&#34;indent&#34;: true()}), ' xmlns=&#34;http://www.tei-c.org/ns/1.0&#34;', '')}&lt;/code&gt;"/>
             <param name="containedBy" value="classes"/>
-            <param name="members" value="let $members:= for $i in classes/memberOf[not(starts-with(@key, 'att'))] let $n := $i/@key order by $n return $i return &lt;ref-cell&gt;{$members}&lt;/ref-cell&gt;"/>
+            <param name="members" value="let $members:= for $i in classes/memberOf[not(starts-with(@key, 'att'))] let $n := $i/@key order by $n return ($i, ' ') return &lt;ref-cell&gt;{$members}&lt;/ref-cell&gt;"/>
             <param name="module" value="@module"/>
             <param name="attributes" value="attList"/>
             <param name="example" value="(exemplum[@xml:lang=$parameters?lng], exemplum)[1]"/>
@@ -530,9 +530,9 @@
         </model>
                 </elementSpec>
             <elementSpec ident="gloss" mode="add">
-        <model predicate="$parameters?mode='ref'" behaviour="inline" cssClass="gloss"/>
-        <model behaviour="inline"/>
-    </elementSpec>
+                    <model predicate="$parameters?mode='ref'" behaviour="inline" cssClass="gloss"/>
+                    <model behaviour="inline"/>
+                </elementSpec>
             </schemaSpec>
         </body>
     </text>
