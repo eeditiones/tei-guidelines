@@ -394,7 +394,7 @@
             <param name="lng" value="'en'"/>
             <param name="moduleName" value="let $module := @module   let $spec := root(.)//moduleSpec[@ident=$module]  return $spec/desc"/>
             <param name="members" value="ec:expand-members(.)"/>
-            <param name="memberOf" value="let $members:= for $i in classes/memberOf[not(starts-with(@key, 'att'))] let $n := $i/@key order by $n return ($i, ' ') return &lt;ref-cell&gt;{$members}&lt;/ref-cell&gt;"/>
+            <param name="memberOf" value="ec:expand-usedBy(.)"/>
             <param name="remarks" value="(remarks[@xml:lang=$parameters?lng], remarks)[1]"/>
             <pb:template xmlns="" xml:space="preserve"><div class="element-spec">
   <h3>[[ident]]</h3>
@@ -469,6 +469,10 @@
         </model>
                 </elementSpec>
             <elementSpec ident="ref-cell" mode="add">
+                    <model predicate="@type='used-by' and count(child::*)" behaviour="inline">
+            <param name="members" value="."/>
+            <pb:template xmlns="" xml:space="preserve"><tr><td>Used by</td><td>[[members]]</td></tr></pb:template>
+        </model>
                     <model predicate="count(child::*)" behaviour="passthrough">
             <param name="members" value="."/>
             <pb:template xmlns="" xml:space="preserve"><tr><td>Member of</td><td>[[members]]</td></tr></pb:template>

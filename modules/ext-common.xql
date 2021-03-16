@@ -57,3 +57,15 @@ declare function pmf:expand-class-members($root, $ident) {
                 
         (<ref xmlns="http://www.tei-c.org/ns/1.0" target="ref/{$i}"> {$i/string()}</ref>, ' ')
 };
+
+declare function pmf:expand-usedBy($classSpec) {
+    <ref-cell type="used-by" xmlns="http://www.tei-c.org/ns/1.0">
+        {
+        let $root := root($classSpec)  
+        for $c in ($root//tei:classRef[@key=$classSpec/@ident]/(ancestor::tei:elementSpec | ancestor::tei:macroSpec))
+            let $n := $c/@ident/string() 
+            order by $n 
+            return (<ref xmlns="http://www.tei-c.org/ns/1.0" target="ref/{$n}">{$n}</ref>, ' ')      
+        }
+    </ref-cell>
+};
