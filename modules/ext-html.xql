@@ -141,11 +141,38 @@ declare function pmf:catalog($config as map(*), $node as element(), $class as xs
             $content/@type
 
     
-    return
+    let $map :=
     for $item in $list
-    order by $item
+        let $letter := 
+            if (starts-with($item, 'att.')) then
+                substring(upper-case($item), 5, 1)
+            else if (starts-with($item, 'model.')) then
+                substring(upper-case($item), 7, 1)
+            else
+                substring(upper-case($item), 1, 1)
+        group by $letter
+        order by $letter
+
+        return map {"letter": $letter, "items": $item}
+
     return
-         <li><a href="ref/{$item}">{$item/string()}</a></li>
+
+    (
+        for $m in $map
+        return
+        (
+            <span><a href="#{$m?letter}">{$m?letter}</a></span>, ' ')
+            ,
+            for $m in $map
+            return
+                <div>
+                    <h2><a id="{$m?letter}"/>{$m?letter}</h2>
+                    {for $item in $m?items
+                        return
+                        (<a href="ref/{$item}">{$item/string()}</a>, ' ')
+                    }
+                </div>
+    )
 };
 
 
