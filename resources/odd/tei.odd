@@ -227,7 +227,7 @@
             <pb:template xmlns="" xml:space="preserve"><div class="element-spec">
   <h3 class="ident">[[ident]]</h3>
   <table>
-    <tr><td colspan="2"><span class="ident">[[ident]]</span> <b>[[gloss]]</b> [[desc]] [[links]]</td></tr>
+    <tr><td colspan="2"><span class="ident bracket">[[ident]]</span>[[gloss]] [[desc]] [[links]]</td></tr>
     <tr><td>Module</td><td>[[module]] — [[moduleName]]</td></tr>
     <tr><td>Attributes</td><td><dl class="att-class">[[attClass]]</dl>[[attributes]]</td></tr>
     [[members]]
@@ -399,7 +399,7 @@
             <pb:template xmlns="" xml:space="preserve"><div class="element-spec">
   <h3>[[ident]]</h3>
   <table>
-    <tr><td colspan="2"><b>[[gloss]]</b> [[desc]] [[links]]</td></tr>
+    <tr><td colspan="2">[[gloss]] [[desc]] [[links]]</td></tr>
     <tr><td>Module</td><td>[[module]] — [[moduleName]]</td></tr>
     [[memberOf]]
     <tr><td>Members</td><td>[[members]]</td></tr>
@@ -421,7 +421,7 @@
             <pb:template xmlns="" xml:space="preserve"><div class="element-spec">
   <h3>[[ident]]</h3>
   <table>
-    <tr><td colspan="2"><b>[[gloss]]</b> [[desc]] [[links]]</td></tr>
+    <tr><td colspan="2">[[gloss]] [[desc]] [[links]]</td></tr>
     <tr><td>Module</td><td>[[module]] — [[moduleName]]</td></tr>
     <tr><td>Members</td><td>[[members]]</td></tr>
     <tr><td>Attributes</td><td><dl class="att-class">[[attClass]]</dl>[[attributes]]</td></tr>   
@@ -505,6 +505,34 @@
             </outputRendition>
         </model>
                 </elementSpec>
+            <elementSpec ident="macroSpec" mode="add">
+                    <model predicate="$parameters?mode='ref'" behaviour="passthrough">
+            <param name="ident" value="@ident"/>
+            <param name="gloss" value="gloss[@xml:lang=$parameters?lng]"/>
+            <param name="desc" value="(' ', desc[@xml:lang=$parameters?lng])"/>
+            <param name="links" value="if (listRef/ptr) then (' [', listRef/ptr, ']') else ()"/>
+            <param name="module" value="@module"/>
+            <param name="moduleName" value="let $module := @module   let $spec := root(.)//moduleSpec[@ident=$module]  return $spec/desc"/>
+            <param name="remarks" value="(remarks[@xml:lang=$parameters?lng], remarks)[1]"/>
+            <param name="usedBy" value="ec:expand-macro-usedBy(.)"/>
+            <param name="content" value="let $code := content return &lt;code&gt; {replace(serialize($code, map {&#34;indent&#34;: true()}), ' xmlns=&#34;http://www.tei-c.org/ns/1.0&#34;', '')}&lt;/code&gt;"/>
+            <pb:template xmlns="" xml:space="preserve"><div class="element-spec">
+  <h3>[[ident]]</h3>
+  <table>
+    <tr><td colspan="2"><span class="ident">[[ident]]</span> [[gloss]] [[desc]] [[links]]</td></tr>
+    <tr><td>Module</td><td>[[module]] — [[moduleName]]</td></tr>
+    [[usedBy]]
+    <tr><td>Content model</td><td>[[content]]</td></tr>
+    [[remarks]]
+    <!-- Declaration -->
+</table>
+</div></pb:template>
+        </model>
+                </elementSpec>
+            <elementSpec ident="gloss" mode="add">
+        <model predicate="$parameters?mode='ref'" behaviour="inline" cssClass="gloss"/>
+        <model behaviour="inline"/>
+    </elementSpec>
             </schemaSpec>
         </body>
     </text>

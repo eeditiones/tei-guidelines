@@ -66,7 +66,7 @@
                     </app-header>
                     <main class="content-body">
                         <pb-view id="reference" src="document1" 
-                            xpath="//(elementSpec | classSpec | macroSpec | attSpec)[@ident='${id}']" 
+                            xpath="//(elementSpec | classSpec | macroSpec | attSpec | dataSpec)[@ident='${id}']" 
                             data-template="pages:parse-params" 
                             view="single" subscribe="transcription" fix-links="fixLinks">
                             <pb-param name="lng" value="en"/>

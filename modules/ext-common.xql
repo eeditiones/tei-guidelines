@@ -69,3 +69,15 @@ declare function pmf:expand-usedBy($classSpec) {
         }
     </ref-cell>
 };
+
+declare function pmf:expand-macro-usedBy($macroSpec) {
+    <ref-cell type="used-by" xmlns="http://www.tei-c.org/ns/1.0">
+        {
+        let $root := root($macroSpec)  
+            for $c in $root//tei:macroRef[@key=$macroSpec/@ident]/ancestor::tei:elementSpec
+            let $n := $c/@ident/string() 
+            order by $n 
+            return (<ref xmlns="http://www.tei-c.org/ns/1.0" target="ref/{$n}">{$n}</ref>, ' ')      
+        }
+    </ref-cell>
+};

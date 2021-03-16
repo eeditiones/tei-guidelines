@@ -81,13 +81,24 @@ a:hover {
     content: ' ';
 }
 
-.ident::before {
+.bracket::before {
    content: '<';
 }
-.ident::after {
+.bracket::after {
     content: '>';
  }
 
  .att-class li {
      list-style: none;
  }
+
+ .ident-nobracket {
+    font-weight: bold;
+}
+
+.gloss::before {
+    content: ' (';
+}
+.gloss::after {
+    content: ') ';
+}
