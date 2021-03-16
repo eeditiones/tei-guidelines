@@ -138,7 +138,7 @@ declare function pmf:catalog($config as map(*), $node as element(), $class as xs
                 $root//tei:macroSpec/@ident
         default
             return
-            $content/@type
+                ()
 
     
     let $map :=
