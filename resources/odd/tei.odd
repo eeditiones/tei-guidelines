@@ -533,6 +533,9 @@
                     <model predicate="$parameters?mode='ref'" behaviour="inline" cssClass="gloss"/>
                     <model behaviour="inline"/>
                 </elementSpec>
+            <elementSpec ident="divGen" mode="add">
+                    <model behaviour="catalog" cssClass="attcat"/>
+                </elementSpec>
             </schemaSpec>
         </body>
     </text>

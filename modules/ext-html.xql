@@ -119,4 +119,35 @@ declare function pmf:code($config as map(*), $node as element(), $class as xs:st
     </pb-code-highlight>
 };
 
+declare function pmf:catalog($config as map(*), $node as element(), $class as xs:string+, $content as node()*) {
+    let $root := root($content)
+
+    let $list := 
+    switch ($content/@type) 
+        case "modelclasscat"
+            return
+                $root//tei:classSpec[@type='model']/@ident
+        case "attclasscat"
+            return
+                $root//tei:classSpec[@type='atts']/@ident
+        case "elementcat"
+            return
+                $root//tei:elementSpec/@ident
+        case "macrocat"
+            return
+                $root//tei:macroSpec/@ident
+        default
+            return
+            $content/@type
+
+    
+    return
+    for $item in $list
+    order by $item
+    return
+         <li><a href="ref/{$item}">{$item/string()}</a></li>
+};
+
+
+
 
