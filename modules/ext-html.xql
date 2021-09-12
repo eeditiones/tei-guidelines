@@ -133,6 +133,9 @@ declare function pmf:catalog($config as map(*), $node as element(), $class as xs
         case "elementcat"
             return
                 $root//tei:elementSpec/@ident
+        case "attcat"
+            return
+                $root//tei:attDef/@ident
         case "macrocat"
             return
                 $root//tei:macroSpec/@ident
@@ -156,6 +159,25 @@ declare function pmf:catalog($config as map(*), $node as element(), $class as xs
         return map {"letter": $letter, "items": $item}
 
     return
+        if ($content/@type eq "attcat") then
+            <table>{
+                for $attribute in $list
+                let $elements := $attribute/(ancestor::tei:elementSpec | ancestor::tei:classSpec)/@ident
+                group by $att := $attribute/string()
+                order by $att
+                return
+                    <tr id="{$att}">
+                        <td class="attcat-col1">{$att}</td>
+                        <td class="attcat-col2">{
+                            for $elem in $elements
+                            order by $elem
+                            return
+                                (<a href="ref/{$elem}" title="{$elem/../tei:desc[@xml:lang eq "en"]/normalize-space()}">{$elem/string()}</a>, ' ')
+                        }</td>
+                    </tr>
+            }</table>
+            
+        else
 
     (
         for $m in $map
