@@ -5,10 +5,14 @@
 }
 
 .breadcrumb {
-    margin: 5px;
     font-family: "Londrina Solid", Verdana, "Helvetica", sans-serif;
     font-size: 20px;
     font-weight: 300;
+}
+
+.breadcrumb:before {
+    content: ' > ';
+    color: #607d8b;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -30,10 +34,12 @@ dt {
 
 .ident {
     font-weight: bold;
+    margin-top: 0;
 }
 
 .title {
     text-align: right;
+    margin: 0 0 0.2em 0;
 }
 
 .tei-table {
@@ -51,11 +57,8 @@ a:hover {
     text-decoration: underline;
 }
 
-.title {
-    margin-bottom: 0.2em;
-}
-
 .element-spec table {
+    width: 100%;
     border-spacing: 0;
     border-left: 1px solid grey;
     border-bottom: 1px solid grey;

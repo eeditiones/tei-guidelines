@@ -20,36 +20,11 @@
         <link rel="stylesheet" href="resources/css/guidelines.css"/>
         <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
         <style>
-            @media (min-width: 769px) {
-                .toolbar pb-navigation {
-                    display: none;
-                }
-            }
-
             .content-body {
-                position: relative;
+                display: flex;
                 justify-content: center;
-            }
-
-            .content-body pb-navigation {
-                position: fixed;
-                bottom: 45%;
-                --paper-fab-background: #35424b;
-                color: white;
-            }
-
-            .content-body pb-navigation[direction=backward] {
-                left: 20px;
-            }
-
-            .content-body pb-navigation[direction=forward] {
-                right: 20px;
-            }
-
-            @media (max-width: 769px) {
-                .content-body pb-navigation {
-                    display: none;
-                }
+                --pb-view-max-width: 1200px;
+                --pb-code-highlight-white-space: pre-wrap;
             }
         </style>
     </head>

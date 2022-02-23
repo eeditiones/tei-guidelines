@@ -78,6 +78,10 @@
         </model>
                 </elementSpec>
                 <elementSpec ident="head" mode="change">
+                    <model predicate="$parameters?mode='guide'" behaviour="listItem">
+            <param name="id" value="../@xml:id"/>
+            <pb:template xmlns="" xml:space="preserve"><pb-link hash="[[id]]" emit="transcription">[[content]]</pb-link></pb:template>
+        </model>
                     <model predicate="$parameters?mode='breadcrumbs'" behaviour="inline">
             <param name="uri" value="parent::div/@xml:id"/>
             <param name="label" value="."/>
@@ -176,6 +180,9 @@
                     <model behaviour="inline"/>
                 </elementSpec>
             <elementSpec ident="div" mode="change">
+                    <model predicate="$parameters?mode='guide'" behaviour="list">
+            <param name="content" value="(head, div)"/>
+        </model>
                     <model predicate="$parameters?mode='toc' and ancestor::body" behaviour="block">
             <param name="label" value="head/string()"/>
             <param name="id" value="@xml:id"/>
@@ -188,7 +195,7 @@
             <pb:template xmlns="" xml:space="preserve"><a href="p5.xml?id=[[id]]">[[label]]</a></pb:template>
         </model>
                     <modelSequence predicate="$parameters?mode='breadcrumbs'">
-            <model behaviour="inline">
+            <model behaviour="pass-through">
                 <param name="content" value="$get(.)/(ancestor::front | ancestor::back)"/>
             </model>
             <model predicate="$get(.)/ancestor::div/head" behaviour="inline" cssClass="breadcrumb">
