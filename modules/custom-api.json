@@ -25,6 +25,25 @@
         }
     },
     "paths": {
+        "/api/idents": {
+            "get": {
+                "summary": "Retrieve list of @ident for static pages",
+                "tags": [ "static" ],
+                "operationId": "custom:idents",
+                "responses": {
+                    "200":{
+                        "description": "List of elements with @ident",
+                        "content": {
+                            "application/json": {
+                                "schema":{
+                                    "type": "array"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/ref/{id}": {
             "get": {
                 "summary": "Retrieve the reference page for a given ident",
@@ -33,7 +52,7 @@
                 
                 "parameters": [
                     {
-                        "name": "doc",
+                        "name": "docid",
                         "in": "query",
                         "description": "Guidelines document",
                         "required": true,

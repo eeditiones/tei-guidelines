@@ -23,6 +23,23 @@ declare variable $dapi:CACHE := true();
 
 declare variable $dapi:CACHE_COLLECTION := $config:app-root || "/cache";
 
+declare function dapi:metadata($request as map(*)) {
+    let $doc := xmldb:decode($request?parameters?id)
+    let $xml := config:get-document($doc)
+    return
+        if (exists($xml)) then
+            let $config := tpu:parse-pi(root($xml), ())
+            return map {
+                "title": nav:get-document-title($config, root($xml)/*) => normalize-space(),
+                "view": $config?view,
+                "odd": $config?odd,
+                "template": $config?template,
+                "collection": substring-after(util:collection-name($xml), $config:data-root || "/")
+            }
+        else
+            error($errors:NOT_FOUND, "Document " || $doc || " not found")
+};
+
 declare function dapi:delete($request as map(*)) {
     let $id := xmldb:decode($request?parameters?id)
     let $doc := config:get-document($id)
@@ -57,7 +74,7 @@ declare function dapi:html($request as map(*)) {
     let $doc := xmldb:decode($request?parameters?id)
     return
         if ($doc) then
-            let $xml := config:get-document($doc)/*
+            let $xml := config:get-document($doc)
             return
                 if (exists($xml)) then
                     let $config := tpu:parse-pi(root($xml), ())
@@ -71,7 +88,7 @@ declare function dapi:html($request as map(*)) {
             error($errors:BAD_REQUEST, "No document specified")
 };
 
-declare %private function dapi:postprocess($nodes as node()*, $styles as element()?, $odd as xs:string?, 
+declare function dapi:postprocess($nodes as node()*, $styles as element()?, $odd as xs:string?, 
     $base as xs:string?, $components as xs:boolean?) {
     for $node in $nodes
     return
@@ -85,7 +102,9 @@ declare %private function dapi:postprocess($nodes as node()*, $styles as element
                             <base href="{$base}"/>
                         else
                             (),
+                        <meta charset="utf-8"/>,
                         $node/node(),
+                        <link rel="stylesheet" type="text/css" href="transform/{replace($oddName, "^(.*)\.odd$", "$1")}.css"/>,
                         <link rel="stylesheet" type="text/css" href="transform/{replace($oddName, "^(.*)\.odd$", "$1")}-print.css" media="print"/>,
                         $styles,
                         if ($components) then (
@@ -103,7 +122,13 @@ declare %private function dapi:postprocess($nodes as node()*, $styles as element
                             }}
                             </style>,
                             <script defer="defer" src="https://unpkg.com/@webcomponents/webcomponentsjs@2.4.3/webcomponents-loader.js"></script>,
-                            <script type="module" src="{$config:webcomponents-cdn}@{$config:webcomponents}/dist/pb-components-bundle.js"></script>
+                            switch ($config:webcomponents)
+                                case "dev" return
+                                    <script type="module" src="{$config:webcomponents-cdn}/src/pb-components-bundle.js"></script>
+                                case "local" return
+                                    <script type="module" src="resources/scripts/pb-components-bundle.js"></script>
+                                default return
+                                    <script type="module" src="{$config:webcomponents-cdn}@{$config:webcomponents}/dist/pb-components-bundle.js"></script>
                         ) else
                             ()
 
@@ -124,7 +149,7 @@ declare %private function dapi:postprocess($nodes as node()*, $styles as element
                 return
                     element { node-name($node) } {
                         $node/@*,
-                        if ($components) then
+                        if ($components and not($node//pb-page)) then
                             <pb-page endpoint="{$base}">{$content}</pb-page>
                         else
                             $content
@@ -173,24 +198,41 @@ declare function dapi:latex($request as map(*)) {
                                 <option>
                                     <workingDir>{$config:tex-temp-dir}</workingDir>
                                 </option>
-                            let $output :=
-                                for $i in 1 to 3
-                                return
-                                    process:execute(
-                                        ( $config:tex-command($file) ), $options
-                                    )
+                            let $outputPath := $config:tex-temp-dir || "/" || $file || ".pdf"
+                            let $cleanup := if (file:exists($outputPath)) then file:delete($outputPath) else ()
+                            let $output0 :=
+                                process:execute(
+                                    ( $config:tex-command($file) ), $options
+                                )
                             return
-                                if ($output[last()]/@exitCode < 2) then
-                                    let $pdf := file:read-binary($config:tex-temp-dir || "/" || $file || ".pdf")
-                                    return
-                                        response:stream-binary($pdf, "media-type=application/pdf", $file || ".pdf")
+                                if (not(file:exists($outputPath))) then
+                                    error($errors:BAD_REQUEST, "LaTeX reported errors", dapi:latex-error($output0))
                                 else
-                                    $output
+                                    let $output :=
+                                        for $i in 1 to 2
+                                        return
+                                            process:execute(
+                                                ( $config:tex-command($file) ), $options
+                                            )
+                                    return
+                                        let $pdf := file:read-binary($config:tex-temp-dir || "/" || $file || ".pdf")
+                                        return
+                                            response:stream-binary($pdf, "media-type=application/pdf", $file || ".pdf")
                 else
                     error($errors:NOT_FOUND, "Document " || $id || " not found")
         else
             error($errors:BAD_REQUEST, "No document specified")
     )
+};
+
+declare function dapi:latex-error($output as element()) {
+    "exit code: " || $output/@exitCode/string() || "&#10;&#10;" ||
+    string-join(
+        for $line in $output//line
+        return
+            $line || "&#10;"
+    )
+
 };
 
 declare function dapi:cache($id as xs:string, $output as xs:base64Binary) {
@@ -301,7 +343,7 @@ declare function dapi:get-fragment($request as map(*)) {
     let $xml :=
         if ($request?parameters?xpath) then
             for $document in config:get-document($doc)
-            let $namespace := namespace-uri-from-QName(node-name($document/*))
+            let $namespace := namespace-uri-from-QName(node-name(root($document)/*))
             let $xquery := "declare default element namespace '" || $namespace || "'; $document" || $request?parameters?xpath
             let $data := util:eval($xquery)
             return
@@ -312,7 +354,7 @@ declare function dapi:get-fragment($request as map(*)) {
 
         else if (exists($request?parameters?id)) then (
             for $document in config:get-document($doc)
-            let $config := tpu:parse-pi($document, $view)
+            let $config := tpu:parse-pi(root($document), $view)
             let $data :=
                 if (count($request?parameters?id) = 1) then
                     nav:get-section-for-node($config, $document/id($request?parameters?id))
@@ -379,7 +421,8 @@ declare function dapi:get-fragment($request as map(*)) {
                                 "format": $request?parameters?format,
                                 "view": $view,
                                 "doc": $doc,
-                                "root": $request?parameters?root,
+                                "root": head(($request?parameters?root, util:node-id($xml?data))),
+                                "id": $content/@xml:id/string(),
                                 "odd": $xml?config?odd,
                                 "next":
                                     if ($next) then
@@ -414,7 +457,12 @@ declare function dapi:get-fragment($request as map(*)) {
                                     <output:indent>no</output:indent>
                                     <output:method>html5</output:method>
                                         </output:serialization-parameters>),
-                                "footnotes": $transformed?footnotes,
+                                "footnotes": serialize($transformed?footnotes,
+                                    <output:serialization-parameters xmlns:output="http://www.w3.org/2010/xslt-xquery-serialization">
+                                        <output:indent>no</output:indent>
+                                        <output:method>html5</output:method>
+                                    </output:serialization-parameters>
+                                ),
                                 "userParams": $userParams,
                                 "collection": dapi:get-collection($xml?data[1])
                             }
