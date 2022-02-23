@@ -34,12 +34,12 @@ dt {
 
 .ident {
     font-weight: bold;
-    margin-top: 0;
+    margin-top: 1em;
 }
 
 .title {
     text-align: right;
-    margin: 0 0 0.2em 0;
+    margin: 1em 0 0.2em 0;
 }
 
 .tei-table {
@@ -104,4 +104,10 @@ a:hover {
 }
 .gloss::after {
     content: ') ';
+}
+
+@media (max-width: 768px) {
+    pb-code-highlight {
+        font-size: 10px;
+    }
 }
