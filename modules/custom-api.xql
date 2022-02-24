@@ -30,6 +30,12 @@ declare function api:idents($request as map(*)) {
         }
 };
 
+declare function api:ident-autocomplete($request as map(*)) {
+    array {
+        sort(doc($config:data-root || "/p5.xml")//(tei:elementSpec | tei:classSpec | tei:macroSpec | tei:attSpec | tei:dataSpec)/@ident/string())
+    }
+};
+
 (:~
  : Keep this. This function does the actual lookup in the imported modules.
  :)

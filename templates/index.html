@@ -15,11 +15,12 @@
     <link rel="stylesheet" href="resources/css/guidelines.css"/>
 
     <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
+    <script src="resources/scripts/app.js"/>
     <custom-style>
         <style>
             main {
                 display: grid;
-                grid-template-columns: 1fr auto auto auto 1fr;
+                grid-template-columns: 1fr auto auto auto auto 1fr;
                 grid-template-rows: auto 1fr;
                 column-gap: 20px;
             }
@@ -104,10 +105,17 @@
                             </pb-view> 
                     </div>
                     <div class="back">
-                        <h1> Back Matter</h1>
+                        <h1>Back Matter</h1>
                         <pb-view id="back" src="document1" xpath="//back" view="single" odd="tei">
                             <pb-param name="mode" value="toc"/>
                         </pb-view>  
+                    </div>
+                    <div class="reference">
+                        <h1>Reference</h1>
+
+                        <pb-autocomplete placeholder="Name of element or class" emit="ident" substring=""
+                        source="api/ident/autocomplete" preload="" icon="icons:search"></pb-autocomplete>
+                        <p>View reference page for element or class identifier.</p>
                     </div>
                 </main>
                 <footer class="version">
@@ -142,27 +150,6 @@
         </paper-dialog>
     </pb-page>
     <div class="splash"/>
-    <script>
-        const facets = document.getElementById('facets');
-        if (facets) {
-            facets.addEventListener('pb-custom-form-loaded', function(ev) {
-                const elems = ev.detail.querySelectorAll('.facet');
-                elems.forEach(facet =&gt; {
-                    facet.addEventListener('change', () =&gt; {
-                        const table = facet.closest('table');
-                        if (table) {
-                            const nested = table.querySelectorAll('.nested .facet').forEach(nested =&gt; {
-                                if (nested != facet) {
-                                    nested.checked = false;
-                                }
-                            });
-                        }
-                        facets.submit();
-                    });
-                });
-            });
-        }
-    </script>
 </body>
 
 </html>

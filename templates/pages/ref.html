@@ -19,6 +19,7 @@
         <link rel="stylesheet" href="resources/css/theme.css"/>
         <link rel="stylesheet" href="resources/css/guidelines.css"/>
         <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
+        <script src="resources/scripts/app.js"/>
         <style>
             .content-body {
                 display: flex;
@@ -44,15 +45,19 @@
         <pb-page data-template="pages:pb-page" unresolved="unresolved">
             <pb-document id="document1" data-template="pages:pb-document"/>
             <app-drawer-layout force-narrow="force-narrow">
-                <app-drawer data-template="templates:include" data-template-path="templates/drawer.html"/>
+                <app-drawer data-template="lib:include" data-template-path="templates/drawer.html"/>
                 <app-header-layout>
                     <app-header slot="header" reveals="reveals" fixed="fixed" effects="waterfall">
-                        <app-toolbar data-template="templates:include" data-template-path="templates/menu.html"/>
-                        <app-toolbar data-template="templates:include" data-template-path="templates/toolbar.html"/>
+                        <app-toolbar data-template="lib:include" data-template-path="templates/menu.html"/>
+                        <app-toolbar data-template="lib:include" data-template-path="templates/toolbar.html">
+                            <pb-autocomplete placeholder="Name of element or class" emit="ident"
+                                source="api/ident/autocomplete" preload="" icon="icons:search"
+                                substring="" data-target="toolbar-start"></pb-autocomplete>
+                        </app-toolbar>
                     </app-header>
                     <main class="content-body">
                         <pb-view id="reference" src="document1" 
-                            xpath="//(elementSpec | classSpec | macroSpec | attSpec | dataSpec)[@ident='${id}']" 
+                            xpath="//(elementSpec|classSpec|macroSpec|attSpec|dataSpec)[@ident='${id}']" 
                             data-template="pages:parse-params" 
                             view="single" subscribe="transcription" fix-links="fixLinks">
                             <pb-param name="lng" value="en"/>
