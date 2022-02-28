@@ -146,7 +146,7 @@
             <elementSpec ident="ex:egXML" mode="add">
                     <modelSequence>
             <model behaviour="block">
-                <param name="ser" value="replace(serialize(node(), map {&#34;indent&#34;: true()}), ' xmlns=&#34;http://www.tei-c.org/ns/Examples&#34;', '')"/>
+                <param name="ser" value="replace(serialize(node(), map {&#34;indent&#34;: false()}), ' xmlns=&#34;http://www.tei-c.org/ns/Examples&#34;', '')"/>
                 <pb:template xmlns="" xml:space="preserve"><pb-code-highlight language="xml" theme="solarizedlight">[[ser]]</pb-code-highlight></pb:template>
             </model>
             <model predicate="not(@source = ('#NONE', '#UND'))" behaviour="alternate" cssClass="bibl-link">
@@ -162,9 +162,7 @@
                     <model behaviour="block" cssClass="example">
             <param name="content" value="node()"/>
             <pb:template xmlns="" xml:space="preserve"><pb-code-highlight theme="solarizedlight">
-  <template>
-    [[content]]
-  </template>
+  <template>[[content]]</template>
 </pb-code-highlight></pb:template>
         </model>
                 </elementSpec>
@@ -180,9 +178,14 @@
                     <model behaviour="inline"/>
                 </elementSpec>
             <elementSpec ident="div" mode="change">
-                    <model predicate="$parameters?mode='guide'" behaviour="list">
-            <param name="content" value="(head, div)"/>
-        </model>
+                    <modelSequence predicate="$parameters?mode='guide'">
+            <model predicate="parent::div" behaviour="pass-through">
+                <param name="content" value="head"/>
+            </model>
+            <model predicate="div" behaviour="list">
+                <param name="content" value="div"/>
+            </model>
+        </modelSequence>
                     <model predicate="$parameters?mode='toc' and ancestor::body" behaviour="block">
             <param name="label" value="head/string()"/>
             <param name="id" value="@xml:id"/>
