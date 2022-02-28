@@ -2,7 +2,7 @@ window.addEventListener('WebComponentsReady', function() {
     const pbView = document.getElementById('reference');
     pbEvents.subscribe('pb-autocomplete-selected', 'ident', function(ev) {
         const page = document.querySelector('pb-page');
-        if (pbView) {
+        if (pbView && !pbView.getAttribute('static')) {
             pbEvents.emit('pb-refresh', 'transcription', {
                 xpath: `//(elementSpec|classSpec|macroSpec|attSpec|dataSpec)[@ident='${ev.detail.value}']`
             });
