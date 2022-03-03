@@ -1,0 +1,11 @@
+{
+    "odd=tei.odd&user.lng=en&user.mode=ref&view=single&xpath=//(elementSpec|classSpec|macroSpec|attSpec|dataSpec)[@ident='teidata.duration.w3c']": "main-1.json",
+    "id=altref_1&odd=tei.odd&user.lng=en&user.mode=ref&view=single&xpath=//(elementSpec|classSpec|macroSpec|attSpec|dataSpec)[@ident='teidata.duration.w3c']": "main-1.json",
+    "id=altref_2&odd=tei.odd&user.lng=en&user.mode=ref&view=single&xpath=//(elementSpec|classSpec|macroSpec|attSpec|dataSpec)[@ident='teidata.duration.w3c']": "main-1.json",
+    "id=altref_3&odd=tei.odd&user.lng=en&user.mode=ref&view=single&xpath=//(elementSpec|classSpec|macroSpec|attSpec|dataSpec)[@ident='teidata.duration.w3c']": "main-1.json",
+    "id=altref_4&odd=tei.odd&user.lng=en&user.mode=ref&view=single&xpath=//(elementSpec|classSpec|macroSpec|attSpec|dataSpec)[@ident='teidata.duration.w3c']": "main-1.json",
+    "id=altref_5&odd=tei.odd&user.lng=en&user.mode=ref&view=single&xpath=//(elementSpec|classSpec|macroSpec|attSpec|dataSpec)[@ident='teidata.duration.w3c']": "main-1.json",
+    "id=altref_6&odd=tei.odd&user.lng=en&user.mode=ref&view=single&xpath=//(elementSpec|classSpec|macroSpec|attSpec|dataSpec)[@ident='teidata.duration.w3c']": "main-1.json",
+    "id=altref_7&odd=tei.odd&user.lng=en&user.mode=ref&view=single&xpath=//(elementSpec|classSpec|macroSpec|attSpec|dataSpec)[@ident='teidata.duration.w3c']": "main-1.json",
+    "api/ident/autocomplete": "autocomplete.html"
+}

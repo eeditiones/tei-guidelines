@@ -1,0 +1,41 @@
+.logo { background-image: url("../images/tei.png"); }
+.splash { background-image: url("../images/tei.png"); }
+
+body {
+    --pb-base-font-family: 'Roboto', 'Noto', sans-serif;
+    --pb-content-font-family: var(--pb-base-font-family);
+    --pb-content-font-size: 18px;
+    --pb-logo-image-height: 90px;
+    --pb-logo-image-width: 78px;
+    --pb-view-max-width: 44rem;
+    --pb-heading-font-family: "Londrina Solid", Verdana, "Helvetica", sans-serif;
+    --pb-heading-font-weight: 300 !important;
+    --pb-view-scroll-margin-top: 160px;
+    --paper-tab-content_-_font-family: "Londrina Solid", Verdana, "Helvetica", sans-serif;
+    --paper-tab-content_-_font-weight: 300;
+    --paper-card-header_-_background-color: #d1dae0;
+    --paper-card-header-text_-_font-family: "Londrina Solid", Verdana, "Helvetica", sans-serif;
+}
+
+.logo {
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    background-position: left center;
+    width: var(--pb-logo-image-width);
+    height: var(--pb-logo-image-height);
+    cursor: pointer;
+}
+
+.menubar {
+    height: 90px;
+    padding: 0;
+}
+
+.menubar .logo {
+    margin: 0 16px 0 0;
+}
+
+.github {
+    height: 40px;
+    width: auto;
+}

@@ -1,0 +1,303 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+        <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico">
+        <link rel="shortcut icon" type="image/png" href="/images/favicon-16.png" sizes="16x16">
+        <link rel="shortcut icon" type="image/png" href="/images/favicon-24.png" sizes="24x24">
+        <link rel="shortcut icon" type="image/png" href="/images/favicon-32.png" sizes="32x32">
+        <link rel="shortcut icon" type="image/png" href="/images/favicon-64.png" sizes="64x64">
+
+        <title>TEI P5: Guidelines for Electronic Text Encoding and Interchange</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Londrina+Solid:wght@300&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/css/theme.css">
+        <link rel="stylesheet" href="/css/guidelines.css">
+
+        
+<style>
+    @media (min-width: 769px) {
+        .toolbar pb-navigation {
+            display: none;
+        }
+    }
+
+    .content-body {
+        position: relative;
+        display: grid;
+        overflow: auto;
+        grid-template-columns: 1fr minmax(auto, var(--pb-view-max-width)) minmax(auto, 450px) 1fr;
+        grid-template-rows: auto 1fr;
+        column-gap: 20px;
+    }
+
+    .content-body section, .content-body header {
+        display: block;
+        margin: 0 auto;
+        grid-column: 2;
+    }
+
+    @media (min-width: 769px) {
+        .content-body header {
+            width: 100%;
+        }
+
+        .content-body header pb-view {
+            width: 100%;
+        }
+    }
+
+    .content-body aside {
+        grid-column: 3;
+    }
+
+    .content-body pb-navigation {
+        position: fixed;
+        bottom: calc((100vh - 154px) / 2);
+        --paper-fab-background: #35424b;
+        color: white;
+    }
+
+    .content-body pb-navigation[direction=backward] {
+        left: 20px;
+    }
+
+    .content-body pb-navigation[direction=forward] {
+        right: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .content-body {
+            display: block;
+        }
+
+        .content-body pb-navigation {
+            display: none;
+        }
+
+        aside {
+            display: none;
+        }
+    }
+</style>
+
+        <script defer src="https://unpkg.com/@webcomponents/webcomponentsjs@2.4.3/webcomponents-loader.js"></script>
+        <script defer src="https://unpkg.com/web-animations-js@2.3.2/web-animations-next-lite.min.js"></script>
+        
+        <script type="module" src="https://unpkg.com/@teipublisher/pb-components@1.35.2/dist/pb-components-bundle.js"></script>
+        
+        <script src="/scripts/app.js"></script>
+        
+<script>
+    window.addEventListener('WebComponentsReady', function() {
+
+    pbEvents.subscribe('pb-navigate', 'transcription', () => {
+        window.scrollTo(0, 0);
+    });
+});
+</script>
+
+    </head>
+    <body>
+        <pb-page api-version="1.0.0" unresolved="unresolved" app-root="">
+            
+            <pb-document id="document1" path="p5.xml" view="div" odd="tei"></pb-document>
+            
+            <app-drawer-layout force-narrow="force-narrow">
+                <app-drawer slot="drawer" align="right">
+                    <div class="drawer-content">
+                        <pb-media-query query="(max-width: 1023px)">
+                            
+                            <pb-search id="query" label="Search" action="/search" disable-autocomplete redirect></pb-search>
+                            <paper-listbox>
+                                <paper-item>
+                                    <a href="https://tei-c.org/guidelines/p5/using-the-tei-github-repository/">Getting and Using the TEI Sources</a>
+                                </paper-item>
+                                <paper-item>
+                                    <a href="https://github.com/TEIC/TEI">TEI GitHub Repository</a>
+                                </paper-item>
+                                <paper-item>
+                                    <a href="https://github.com/TEIC/TEI/issues" target="_blank">Report an issue</a>
+                                </paper-item>
+                            </paper-listbox>
+                            <!-- language selector -->
+                            <pb-lang name="lang">
+                                
+                                <paper-item value="bg">Български</paper-item>
+                                
+                                <paper-item value="cs">Česky</paper-item>
+                                
+                                <paper-item value="de">Deutsch</paper-item>
+                                
+                                <paper-item value="el">ελληνικά</paper-item>
+                                
+                                <paper-item value="en">English</paper-item>
+                                
+                                <paper-item value="es">Español</paper-item>
+                                
+                                <paper-item value="fi">Suomi</paper-item>
+                                
+                                <paper-item value="fr">Français</paper-item>
+                                
+                                <paper-item value="it">Italiano</paper-item>
+                                
+                                <paper-item value="ka">ქართული</paper-item>
+                                
+                                <paper-item value="nl">Nederlands</paper-item>
+                                
+                                <paper-item value="no">Norsk</paper-item>
+                                
+                                <paper-item value="pl">Polski</paper-item>
+                                
+                                <paper-item value="pt">Português</paper-item>
+                                
+                                <paper-item value="ro">Română</paper-item>
+                                
+                                <paper-item value="ru">русский</paper-item>
+                                
+                                <paper-item value="sl">Slovenščina</paper-item>
+                                
+                                <paper-item value="sv">Svenska</paper-item>
+                                
+                                <paper-item value="tr">Türkçe</paper-item>
+                                
+                                <paper-item value="uk">Українська</paper-item>
+                                
+                                <paper-item value="zh_CN">简体中文</paper-item>
+                                
+                                <paper-item value="zh_TW">繁體中文</paper-item>
+                                
+                            </pb-lang>
+                        </pb-media-query>
+                    </div>
+                </app-drawer>
+                <app-header-layout>
+                    <app-header slot="header" reveals="reveals" fixed="fixed" effects="waterfall">
+                        <app-toolbar class="menubar">
+                            <a href="/index.html" class="logo"></a>
+                            <pb-media-query query="min-width: 1024px">
+                                <a href="/index.html">Start</a>
+                                <a href="https://tei-c.org/guidelines/p5/using-the-tei-github-repository/">Getting and Using the TEI Sources</a>
+                                <a href="https://github.com/TEIC/TEI" target="_blank" title="TEI GitHub Repository"><img src="/images/GitHub-Mark-Light-64px.png" class="github"/></a>
+                                <a href="https://github.com/TEIC/TEI/issues" target="_blank">Report an issue</a>
+                            </pb-media-query>
+                            
+                            <pb-search id="query" label="Search" action="/search" disable-autocomplete redirect></pb-search>
+                            <pb-media-query query="min-width: 1024px">
+                                <!-- language selector -->
+                                <pb-lang name="lang">
+                                    
+                                    <paper-item value="bg">Български</paper-item>
+                                    
+                                    <paper-item value="cs">Česky</paper-item>
+                                    
+                                    <paper-item value="de">Deutsch</paper-item>
+                                    
+                                    <paper-item value="el">ελληνικά</paper-item>
+                                    
+                                    <paper-item value="en">English</paper-item>
+                                    
+                                    <paper-item value="es">Español</paper-item>
+                                    
+                                    <paper-item value="fi">Suomi</paper-item>
+                                    
+                                    <paper-item value="fr">Français</paper-item>
+                                    
+                                    <paper-item value="it">Italiano</paper-item>
+                                    
+                                    <paper-item value="ka">ქართული</paper-item>
+                                    
+                                    <paper-item value="nl">Nederlands</paper-item>
+                                    
+                                    <paper-item value="no">Norsk</paper-item>
+                                    
+                                    <paper-item value="pl">Polski</paper-item>
+                                    
+                                    <paper-item value="pt">Português</paper-item>
+                                    
+                                    <paper-item value="ro">Română</paper-item>
+                                    
+                                    <paper-item value="ru">русский</paper-item>
+                                    
+                                    <paper-item value="sl">Slovenščina</paper-item>
+                                    
+                                    <paper-item value="sv">Svenska</paper-item>
+                                    
+                                    <paper-item value="tr">Türkçe</paper-item>
+                                    
+                                    <paper-item value="uk">Українська</paper-item>
+                                    
+                                    <paper-item value="zh_CN">简体中文</paper-item>
+                                    
+                                    <paper-item value="zh_TW">繁體中文</paper-item>
+                                    
+                                </pb-lang>
+                            </pb-media-query>
+                        </app-toolbar>
+                        <app-toolbar class="toolbar" sticky>
+                            <paper-icon-button id="tocToggle" class="toc-toggle" icon="icons:view-list"></paper-icon-button>
+                            
+                            <pb-zoom emit="transcription" direction="in" icon="icons:zoom-in"></pb-zoom>
+                            <pb-zoom emit="transcription" direction="out" icon="icons:zoom-out"></pb-zoom>
+                            <pb-navigation emit="transcription" keyboard="left"
+                                subscribe="transcription" direction="backward" unit="page">
+                                <paper-icon-button icon="icons:chevron-left"></paper-icon-button>
+                            </pb-navigation>
+                            <pb-navigation emit="transcription" keyboard="right"
+                                subscribe="transcription" direction="forward" unit="page">
+                                <paper-icon-button icon="icons:chevron-right"></paper-icon-button>
+                            </pb-navigation>
+                            <pb-media-query query="max-width: 1023px">
+                                <paper-icon-button icon="icons:menu" drawer-toggle="drawer-toggle"/>
+                            </pb-media-query>
+                            <pb-progress subscribe="transcription" indeterminate="indeterminate" bottom-item="bottom-item"></pb-progress>
+                        </app-toolbar>
+                    </app-header>
+                    
+<pb-drawer toggle="tocToggle" class="toc" emit="toc" subscribe="transcription">
+    <div class="drawer-content">
+        <h3>
+            <pb-i18n key="document.contents">Contents</pb-i18n>
+        </h3>
+        <pb-load id="toc" url="toc.html" src="document1" expand="expand" subscribe="toc" load-once="load-once"><pb-i18n key="dialogs.loading">Loading</pb-i18n></pb-load>
+    </div>
+</pb-drawer>
+<main class="content-body">
+    <pb-navigation direction="backward" unit="page" emit="transcription" subscribe="guide">
+        <paper-fab icon="icons:chevron-left"/>
+    </pb-navigation>
+    <header>
+        <pb-view id="title-view1" src="document1" xpath="//teiHeader" view="single" static="">
+            <pb-param name="mode" value="title"/>
+        </pb-view>
+        <pb-view id="breadcrumbs" src="document1" subscribe="transcription" static="">
+            <pb-param name="mode" value="breadcrumbs"/>
+        </pb-view>
+    </header>
+    <section>
+        <pb-view id="view1" src="document1" append-footnotes="append-footnotes" subscribe="transcription" emit="guide" static="">
+            <pb-param name="lng" value="en"/>
+            <pb-param name="track-ids" value="True"/>
+        </pb-view>
+    </section>
+    <aside>
+        <pb-view src="document1" on-update="on-update" subscribe="guide" static="" no-scroll>
+            <pb-param name="lng" value="en"/>
+            <pb-param name="mode" value="guide"/>
+        </pb-view>
+    </aside>
+    <pb-navigation direction="forward" unit="page" emit="transcription" subscribe="guide">
+        <paper-fab icon="icons:chevron-right"/>
+    </pb-navigation>       
+</main>
+
+                </app-header-layout>
+            </app-drawer-layout>
+        </pb-page>
+        <div class="splash"></div>
+    </body>
+</html>
