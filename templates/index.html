@@ -5,11 +5,15 @@
     <meta charset="utf-8"/>
     <title data-template="config:app-title"/>
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes"/>
-    <link rel="shortcut icon" type="image/x-icon" href="resources/images/favicon.ico"/>
-    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-16.png" sizes="16x16"/>
-    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-24.png" sizes="24x24"/>
-    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-32.png" sizes="32x32"/>
-    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-64.png" sizes="64x64"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="resources/images/apple-touch-icon.png"/>
+    <link rel="icon" type="image/png" sizes="32x32" href="resources/images/favicon-32x32.png"/>
+    <link rel="icon" type="image/png" sizes="16x16" href="resources/images/favicon-16x16.png"/>
+    <link rel="manifest" href="resources/images/site.webmanifest"/>
+    <link rel="mask-icon" href="resources/images/safari-pinned-tab.svg" color="#5bbad5"/>
+    <link rel="shortcut icon" href="resources/images/favicon.ico"/>
+    <meta name="msapplication-TileColor" content="#da532c"/>
+    <meta name="msapplication-config" content="resources/images/browserconfig.xml"/>
+    <meta name="theme-color" content="#ffffff"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Londrina+Solid:wght@100;300&amp;display=swap"/>
     <link rel="stylesheet" href="resources/css/theme.css"/>
     <link rel="stylesheet" href="resources/css/guidelines.css"/>
@@ -33,10 +37,12 @@
             }
 
             header {
-                grid-column: 2 / 5;
+                grid-column: 2 / 6;
                 border-bottom: 1px solid #9e9e9e;
                 margin-bottom: 20px;
                 padding-bottom: 20px;
+                text-align: right;
+                --pb-view-max-width: auto;
             }
 
             header pb-view {
