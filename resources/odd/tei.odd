@@ -41,7 +41,6 @@
             <schemaSpec start="TEI teiCorpus" ident="tei" ns="" source="teipublisher.odd"> <elementSpec ident="gi" mode="add">
                     <model behaviour="link">
             <param name="uri" value="'ref/' || ."/>
-            <param name="target" value="'_blank'"/>
         </model>
                 </elementSpec>
                 <elementSpec ident="ptr" mode="change">

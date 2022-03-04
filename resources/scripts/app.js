@@ -10,8 +10,7 @@ window.addEventListener('WebComponentsReady', function() {
             url.pathname = `${page.appRoot}/ref/${ev.detail.value}`;
             history.pushState('guidelines-ref', null, url.toString());
         } else {
-            const tab = window.open(`${page.appRoot}/ref/${ev.detail.value}`, 'guidelines-ref');
-            tab.focus();
+            window.location = `${page.appRoot}/ref/${ev.detail.value}`;
         }
     });
 });
