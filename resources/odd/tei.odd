@@ -234,6 +234,7 @@
             <param name="remarks" value="(remarks[@xml:lang=$parameters?lng], remarks)[1]"/>
             <param name="mayContain" value="content"/>
             <param name="schematron" value="constraintSpec"/>
+            <param name="links" value="if (listRef/ptr) then (' [', for $i in listRef/ptr return ($i, ' '), ']') else ()"/>
             <pb:template xmlns="" xml:space="preserve"><div class="element-spec">
   <h3 class="ident">[[ident]]</h3>
   <table>
