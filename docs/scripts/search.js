@@ -1,7 +1,7 @@
 /**
  * Functions for client-side search.
  * 
- * Generated 2022-03-04 16:41:34
+ * Generated 2022-03-04 20:06:39
  */
 const indexData = [];
 const headings = {};
