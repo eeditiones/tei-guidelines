@@ -8,6 +8,13 @@ self.addEventListener("message", (event) => {
   }
 });
 
+self.addEventListener('install', event => {
+    event.waitUntil(
+        self.caches.open('guidelines-offline-fallbacks')
+        .then(cache => cache.add('/offline/index.html'))
+    );
+});
+
 workbox.precaching.precacheAndRoute([
     
     {
@@ -42,11 +49,6 @@ workbox.precaching.precacheAndRoute([
     
 ]);
 
-workbox.routing.setCatchHandler(async ({event}) => {
-    console.warn(event.request.destination);
-    return Response.error();
-});
-
 workbox.routing.registerRoute(
     ({request}) => request.destination === 'image',
     new workbox.strategies.CacheFirst({
@@ -71,3 +73,25 @@ workbox.routing.registerRoute(
 workbox.routing.setDefaultHandler(new workbox.strategies.StaleWhileRevalidate({
     cacheName: CACHE
 }));
+
+async function offlinePage(cache) {
+    const cached = await cache.match('/offline/index.html'); 
+    if (!cached) {
+        console.log('offline page not found in cache');
+        return Response.error();
+    }
+    return cached;
+}
+
+const handler = async (event) => {
+    console.log(`Destination: ${event.request.destination}`);
+    const cache = await self.caches.open('guidelines-offline-fallbacks');
+    switch (event.request.destination) {
+        case 'document':
+            return offlinePage(cache);
+        default:
+            return Response.error();
+    }
+};
+
+workbox.routing.setCatchHandler(handler);

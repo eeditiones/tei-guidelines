@@ -39,3 +39,9 @@ body {
     height: 40px;
     width: auto;
 }
+
+@media (max-width: 768px) {
+    .menubar {
+        padding-right: 10px;
+    }
+}
