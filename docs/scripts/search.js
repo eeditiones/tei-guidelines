@@ -1,3 +1,8 @@
+/**
+ * Functions for client-side search.
+ * 
+ * Generated 2022-03-04 14:19:25
+ */
 const indexData = [];
 const headings = {};
 
