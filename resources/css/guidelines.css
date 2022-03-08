@@ -28,7 +28,7 @@ body {
 
 .menubar {
     height: 90px;
-    padding: 0;
+    padding-left: 0;
 }
 
 .menubar .logo {
