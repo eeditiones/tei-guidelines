@@ -1106,6 +1106,13 @@
 						"schema": {
 							"type": "string"
 						}
+					},
+					{
+						"name": "If-Modified-Since",
+						"in": "header",
+						"schema": {
+							"type": "string"
+						}
 					}
 				],
 				"responses": {
