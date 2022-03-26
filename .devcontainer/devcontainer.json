@@ -1,0 +1,19 @@
+{
+    "name": "TEI P5 Guidelines: Development Container",
+    "build": {
+        "dockerfile": "Dockerfile.dev",
+        "args": {
+            "HTTP_PORT": "8080",
+            "HTTPS_PORT": "8443"
+        }
+    },
+    "forwardPorts": [ 8080 ],
+    "runArgs": [
+        "--name=TEIGuidelines"
+    ],
+    "extensions": [ "exist-db.existdb-vscode", "42crunch.vscode-openapi", "redhat.vscode-xml" ],
+    "overrideCommand": false,
+    "postCreateCommand": [
+        "${containerWorkspaceFolder}/.devcontainer/init.sh"
+    ]
+}
