@@ -501,13 +501,17 @@ declare %private function dapi:extract-footnotes($html as element()*) {
 
 declare function dapi:table-of-contents($request as map(*)) {
     let $doc := xmldb:decode-uri($request?parameters?id)
-    let $view := head(($request?parameters?view, $config:default-view))
-    let $xml := pages:load-xml($view, (), $doc)
+    let $documents := config:get-document($doc)
     return
-        if (exists($xml)) then
-            pages:toc-div(root($xml?data), $xml, $request?parameters?target, $request?parameters?icons)
-        else
-            error($errors:NOT_FOUND, "Document " || $doc || " not found")
+        cutil:check-last-modified($request, $documents, function($request as map(*), $documents as node()*) {
+            let $view := head(($request?parameters?view, $config:default-view))
+            let $xml := pages:load-xml($documents, $view, (), $doc)
+            return
+                if (exists($xml)) then
+                    pages:toc-div(root($xml?data), $xml, $request?parameters?target, $request?parameters?icons)
+                else
+                    error($errors:NOT_FOUND, "Document " || $doc || " not found")
+        })
 };
 
 declare function dapi:preview($request as map(*)) {
