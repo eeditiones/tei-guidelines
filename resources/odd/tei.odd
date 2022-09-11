@@ -218,7 +218,7 @@
             <elementSpec ident="elementSpec" mode="add">
                     <model predicate="$parameters?mode='ref'" behaviour="passthrough">
             <param name="ident" value="@ident"/>
-            <param name="gloss" value="gloss[@xml:lang=$parameters?lng]"/>
+            <param name="gloss" value="gloss[@xml:lang=$parameters?lng][normalize-space(.)]"/>
             <param name="lng" value="'en'"/>
             <param name="desc" value="(' ', desc[@xml:lang=$parameters?lng])"/>
             <param name="heading" value="@ident"/>
