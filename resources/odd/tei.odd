@@ -118,7 +118,11 @@
             </model>
             <model behaviour="heading">
                 <param name="level" value="count(ancestor::div)"/>
-                <param name="content" value="let $div := $get(.)/parent::div   return (ec:heading-number($div),' ', .)"/>
+                <param name="content" value="."/>
+                <param name="number" value="let $div := $get(.)/parent::div   return ec:heading-number($div)"/>
+                <param name="id" value="parent::div/@xml:id"/>
+                <param name="space" value="' '"/>
+                <pb:template xmlns="" xml:space="preserve"><pb-clipboard data-i18n="[label]clipboard.copy"><a href="?id=[[id]]">[[number]] [[space]] [[content]]</a></pb-clipboard></pb:template>
             </model>
         </modelSequence>
                     <model behaviour="block"/>
