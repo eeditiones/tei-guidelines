@@ -107,6 +107,10 @@ a:hover {
     content: ') ';
 }
 
+.strike-through {
+    text-decoration: line-through;
+}
+
 @media (max-width: 768px) {
     pb-code-highlight {
         font-size: 10px;

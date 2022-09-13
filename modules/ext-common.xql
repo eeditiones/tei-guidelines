@@ -21,18 +21,33 @@ declare function pmf:heading-number($div as node()*) {
         count($div/preceding-sibling::tei:div) + 1
 };
 
-(: return a list of attributes per class, descend into other att classes :)
-declare function pmf:expand-attributes($classSpec as node()) {
+declare function pmf:expand-attributes($classSpec as node(), $attList) {
     let $refs := $classSpec//tei:attDef/@ident 
-    let $atts := string-join(for $r in $refs return '@' || $r, ', ') 
+
+    (: if attribute has been changed or added directly in elementSpec, mark the ones "inherited" from classes as crossed-out :)
+    let $atts := for $r in $refs return 
+        if ($attList?($r)) then 
+            <hi xmlns="http://www.tei-c.org/ns/1.0" rendition="strike-through">@{$r/string()}</hi> 
+        else 
+            '@' || $r
+            
     let $classes := 
         for $c in $classSpec/tei:classes/tei:memberOf/@key[starts-with(., 'att.')]
             let $cS := root($c)//tei:classSpec[@ident=$c] 
-            return (' (' , pmf:expand-attributes($cS) ,')' )
-            (: return $c/string() :)
+            return (' (' , pmf:expand-attributes($cS, $attList) ,')' )
     return
-    (<ref xmlns="http://www.tei-c.org/ns/1.0" target="ref/{$classSpec/@ident/string()}"> {$classSpec/@ident/string()}</ref>, ' (', $atts, ')', $classes)
+    (<ref xmlns="http://www.tei-c.org/ns/1.0" target="ref/{$classSpec/@ident/string()}">
+    {$classSpec/@ident/string()}</ref>, 
+    ' (', 
+    for $i at $pos in $atts 
+        return 
+            if ($pos > 1) then 
+                (', ', $i) 
+            else 
+                $i
+    , ')', $classes)
 };
+
 
 (: return a list of members of an attribute or model class :)
 declare function pmf:expand-members($classSpec as node()) {

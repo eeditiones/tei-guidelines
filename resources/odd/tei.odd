@@ -232,7 +232,7 @@
             <param name="module" value="@module"/>
             <param name="attributes" value="attList"/>
             <param name="example" value="(exemplum[@xml:lang=$parameters?lng], exemplum)[1]"/>
-            <param name="attClass" value="for $i in classes/memberOf[starts-with(@key, 'att')]   let $n := $i/@key    let $classSpec := root($parameters?root)//classSpec[@ident=$n]  let $exp := ec:expand-attributes($classSpec)  return &lt;item&gt;{$exp}&lt;/item&gt;"/>
+            <param name="attClass" value="let $attList := map:merge(  (for $i in attList/attDef return map {$i/@ident: $i/@ident}) )  return for $i in classes/memberOf[starts-with(@key, 'att')]   let $n := $i/@key    let $classSpec := root($parameters?root)//classSpec[@ident=$n]  let $exp := ec:expand-attributes($classSpec, $attList)  return &lt;item&gt;{$exp}&lt;/item&gt;"/>
             <param name="moduleName" value="let $module := @module  let $spec := root($parameters?root)//moduleSpec[@ident=$module] return $spec/desc"/>
             <param name="remarks" value="(remarks[@xml:lang=$parameters?lng], remarks)[1]"/>
             <param name="mayContain" value="content"/>
@@ -427,7 +427,7 @@
             <param name="links" value="if (listRef/ptr) then (' [', listRef/ptr, ']') else ()"/>
             <param name="module" value="@module"/>
             <param name="members" value="ec:expand-members(.)"/>
-            <param name="attClass" value="for $i in classes/memberOf[starts-with(@key, 'att')]   let $n := $i/@key    let $classSpec := root($parameters?root)//classSpec[@ident=$n]  let $exp := ec:expand-attributes($classSpec)  return &lt;item&gt;{$exp}&lt;/item&gt;"/>
+            <param name="attClass" value="for $i in classes/memberOf[starts-with(@key, 'att')]   let $n := $i/@key    let $classSpec := root($parameters?root)//classSpec[@ident=$n]  let $exp := ec:expand-attributes($classSpec, ())  return &lt;item&gt;{$exp}&lt;/item&gt;"/>
             <param name="attributes" value="attList"/>
             <param name="ident" value="@ident"/>
             <param name="lng" value="'en'"/>
@@ -558,6 +558,20 @@
             <param name="content" value="bibl"/>
         </model>
                     <model behaviour="block"/>
+                </elementSpec>
+            <elementSpec ident="item" mode="change"/>
+                <elementSpec ident="hi" mode="change">
+                    <model predicate="@rendition=&#34;strike-through&#34;" behaviour="inline" cssClass="strike-through"/>
+                    <model predicate="@rendition" behaviour="inline" useSourceRendition="true">
+            <outputRendition xml:space="preserve">
+            font-style: italic;
+            </outputRendition>
+        </model>
+                    <model predicate="not(@rendition)" behaviour="inline">
+            <outputRendition xml:space="preserve">
+            font-style: italic;
+            </outputRendition>
+        </model>
                 </elementSpec>
             </schemaSpec>
         </body>
