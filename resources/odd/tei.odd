@@ -550,6 +550,15 @@
             <elementSpec ident="divGen" mode="add">
                     <model behaviour="catalog" cssClass="attcat"/>
                 </elementSpec>
+                <elementSpec ident="listBibl" mode="change">
+                    <model predicate="bibl and ancestor::div[@xml:id='BIB']" behaviour="list">
+            <param name="type" value="'ordered'"/>
+        </model>
+                    <model predicate="bibl" behaviour="list">
+            <param name="content" value="bibl"/>
+        </model>
+                    <model behaviour="block"/>
+                </elementSpec>
             </schemaSpec>
         </body>
     </text>
