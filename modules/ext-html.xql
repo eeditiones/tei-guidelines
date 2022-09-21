@@ -138,7 +138,7 @@ declare function pmf:catalog($config as map(*), $node as element(), $class as xs
                 $root//tei:attDef/@ident
         case "macrocat"
             return
-                $root//tei:macroSpec/@ident
+                $root//tei:macroSpec/@ident | $root//tei:dataSpec/@ident
         default
             return
                 ()
@@ -151,6 +151,10 @@ declare function pmf:catalog($config as map(*), $node as element(), $class as xs
                 substring(upper-case($item), 5, 1)
             else if (starts-with($item, 'model.')) then
                 substring(upper-case($item), 7, 1)
+            else if (starts-with($item, 'macro.')) then
+                'macro'
+            else if (starts-with($item, 'teidata.')) then
+                'datatype'
             else
                 substring(upper-case($item), 1, 1)
         group by $letter
@@ -190,6 +194,7 @@ declare function pmf:catalog($config as map(*), $node as element(), $class as xs
                 <div>
                     <h2><a id="{$m?letter}"/>{$m?letter}</h2>
                     {for $item in $m?items
+                        order by $item
                         return
                         (<a href="ref/{$item}">{$item/string()}</a>, ' ')
                     }
