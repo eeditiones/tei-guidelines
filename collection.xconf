@@ -38,6 +38,12 @@
         </lucene>
         <range>
             <create qname="@ident" type="xs:string"/>
+            <create qname="tei:memberOf">
+                <field name="field-memberOf" type="xs:string" match="@key"/>
+            </create>
+            <create qname="tei:classRef">
+                <field name="field-classRef" type="xs:string" match="@key"/>
+            </create>
         </range>
     </index>
 </collection>

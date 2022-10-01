@@ -54,7 +54,7 @@ declare function pmf:expand-members($classSpec as node()) {
     let $root := root($classSpec)
     return
     (
-        for $c in $root//tei:classSpec[.//tei:memberOf[@key=$classSpec/@ident]]
+        for $c in $root//tei:memberOf[@key=$classSpec/@ident]/ancestor::tei:classSpec
             let $class := $c/@ident
             order by $class
             return
@@ -65,7 +65,7 @@ declare function pmf:expand-members($classSpec as node()) {
 };
 
 declare function pmf:expand-class-members($root, $ident) {
-    for $c in $root//tei:elementSpec[.//tei:memberOf[@key=$ident]]
+    for $c in $root//tei:memberOf[@key=$ident]/ancestor::tei:elementSpec
         let $i := $c/@ident
         order by $i
         return
