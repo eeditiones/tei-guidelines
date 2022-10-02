@@ -43,6 +43,5 @@
     "id=DEPRECATIONS&odd=tei.odd&user.mode=toc&view=single&xpath=//back": "back-4.json",
     "id=PREFS&odd=tei.odd&user.mode=toc&view=single&xpath=//back": "back-4.json",
     "id=COL&odd=tei.odd&user.mode=toc&view=single&xpath=//back": "back-4.json",
-    "api/ident/autocomplete": "autocomplete.html",
     "api/document/p5.xml/contents?target=transcription&icons=true": "toc.html"
 }

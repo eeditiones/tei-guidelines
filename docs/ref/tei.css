@@ -74,6 +74,7 @@ a:hover {
     padding: 5px;
     border-top: 1px solid grey;
     border-right: 1px solid grey;
+    vertical-align: top;
 }
 
 .module h4 {
@@ -110,6 +111,10 @@ a:hover {
 }
 .gloss::after {
     content: ') ';
+}
+
+.strike-through {
+    text-decoration: line-through;
 }
 
 @media (max-width: 768px) {
@@ -170,8 +175,8 @@ a:hover {
 .tei-pb { display: block; margin-left: 4pt; color: grey; float: right; }
 .tei-pb:before { content: '[Page '; }
 .tei-pb:after { content: ']'; }
-.tei-hi1 { font-style: italic; }
 .tei-hi2 { font-style: italic; }
+.tei-hi3 { font-style: italic; }
 .tei-code1 { font-family:monospace; }
 .tei-code2 { font-family:monospace; }
 .tei-del { text-decoration: line-through; }

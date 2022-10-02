@@ -4,6 +4,5 @@
     "id=altref_2&odd=tei.odd&user.lng=en&user.mode=ref&view=single&xpath=//(elementSpec|classSpec|macroSpec|attSpec|dataSpec)[@ident='att.linguistic']": "main-1.json",
     "id=altref_3&odd=tei.odd&user.lng=en&user.mode=ref&view=single&xpath=//(elementSpec|classSpec|macroSpec|attSpec|dataSpec)[@ident='att.linguistic']": "main-1.json",
     "id=altref_4&odd=tei.odd&user.lng=en&user.mode=ref&view=single&xpath=//(elementSpec|classSpec|macroSpec|attSpec|dataSpec)[@ident='att.linguistic']": "main-1.json",
-    "id=altref_5&odd=tei.odd&user.lng=en&user.mode=ref&view=single&xpath=//(elementSpec|classSpec|macroSpec|attSpec|dataSpec)[@ident='att.linguistic']": "main-1.json",
-    "api/ident/autocomplete": "autocomplete.html"
+    "id=altref_5&odd=tei.odd&user.lng=en&user.mode=ref&view=single&xpath=//(elementSpec|classSpec|macroSpec|attSpec|dataSpec)[@ident='att.linguistic']": "main-1.json"
 }

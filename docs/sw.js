@@ -84,7 +84,7 @@ workbox.precaching.precacheAndRoute([
     },
     
     {
-        url: 'https://unpkg.com/@teipublisher/pb-components@1.35.2/dist/pb-components-bundle.js',
+        url: 'https://unpkg.com/@teipublisher/pb-components@1.38.5/dist/pb-components-bundle.js',
         revision: null
     },
     

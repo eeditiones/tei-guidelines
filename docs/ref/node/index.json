@@ -7,6 +7,5 @@
     "id=altref_5&odd=tei.odd&user.lng=en&user.mode=ref&view=single&xpath=//(elementSpec|classSpec|macroSpec|attSpec|dataSpec)[@ident='node']": "main-1.json",
     "id=altref_6&odd=tei.odd&user.lng=en&user.mode=ref&view=single&xpath=//(elementSpec|classSpec|macroSpec|attSpec|dataSpec)[@ident='node']": "main-1.json",
     "id=altref_7&odd=tei.odd&user.lng=en&user.mode=ref&view=single&xpath=//(elementSpec|classSpec|macroSpec|attSpec|dataSpec)[@ident='node']": "main-1.json",
-    "id=altref_8&odd=tei.odd&user.lng=en&user.mode=ref&view=single&xpath=//(elementSpec|classSpec|macroSpec|attSpec|dataSpec)[@ident='node']": "main-1.json",
-    "api/ident/autocomplete": "autocomplete.html"
+    "id=altref_8&odd=tei.odd&user.lng=en&user.mode=ref&view=single&xpath=//(elementSpec|classSpec|macroSpec|attSpec|dataSpec)[@ident='node']": "main-1.json"
 }

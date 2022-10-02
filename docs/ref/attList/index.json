@@ -1,5 +1,4 @@
 {
     "odd=tei.odd&user.lng=en&user.mode=ref&view=single&xpath=//(elementSpec|classSpec|macroSpec|attSpec|dataSpec)[@ident='attList']": "main-1.json",
-    "id=altref_1&odd=tei.odd&user.lng=en&user.mode=ref&view=single&xpath=//(elementSpec|classSpec|macroSpec|attSpec|dataSpec)[@ident='attList']": "main-1.json",
-    "api/ident/autocomplete": "autocomplete.html"
+    "id=altref_1&odd=tei.odd&user.lng=en&user.mode=ref&view=single&xpath=//(elementSpec|classSpec|macroSpec|attSpec|dataSpec)[@ident='attList']": "main-1.json"
 }
