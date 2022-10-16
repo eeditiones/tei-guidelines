@@ -13,6 +13,7 @@ declare namespace tei="http://www.tei-c.org/ns/1.0";
 (: Add your own module imports here :)
 import module namespace rutil="http://exist-db.org/xquery/router/util";
 import module namespace rapi="http://teipublisher.com/api/ref" at "ref.xql";
+import module namespace o2japi="http://teipublisher.com/api/odd-to-json" at "odd2json.xql";
 import module namespace app="teipublisher.com/app" at "app.xql";
 import module namespace config="http://www.tei-c.org/tei-simple/config" at "config.xqm";
 

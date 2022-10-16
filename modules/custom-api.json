@@ -156,6 +156,25 @@
                     }
                 }
             }
+        },
+        "/api/editor": {
+            "get": {
+                "summary": "Generate JSON output reflecting the structure defined by an ODD",
+                "tags": [ "odd" ],
+                "operationId": "o2japi:generate",
+                "responses": {
+                    "200":{
+                        "description": "List of elements with @ident",
+                        "content": {
+                            "application/json": {
+                                "schema":{
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "security": [
