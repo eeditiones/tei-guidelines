@@ -19,15 +19,14 @@ declare function o2j:elementSpec($elements as element(tei:elementSpec)*, $identM
         map {
             "name": $element/@ident/string(),
             "children": array {
-                sort($content)
+                distinct-values($content) => sort()
             },
             "attributes": array {
                 o2j:attributes($element, $attsMap)
             },
             "completion": map {
                 "detail": $element/tei:gloss[@xml:lang='en']/string(),
-                "info": $element/tei:desc[@xml:lang='en']/string(),
-                "type": "keyword"
+                "info": $element/tei:desc[@xml:lang='en']/string()
             }
         }
 };
@@ -45,10 +44,8 @@ declare function o2j:attributes($element as element(tei:elementSpec), $attsMap a
         map {
             "name": $def/@ident/string(),
             "completion": map {
-                "type": "property",
                 "detail": $def/tei:gloss[@xml:lang="en"]/string(),
-                "info": $def/tei:desc[@xml:lang='en']/string(),
-                "apply": $def/@ident/string() || '=""'
+                "info": $def/tei:desc[@xml:lang='en']/string()
             }
         }
 };
@@ -109,7 +106,6 @@ declare function o2j:contains-elements($contents as element()*, $identMap as map
 };
 
 declare function o2j:generate($request as map(*)) {
-    let $start := $request?parameters?start
     let $odd := doc($config:data-root || "/p5.xml")
     let $identMap := map:merge(
         for $spec in $odd//(tei:elementSpec|tei:macroSpec)
