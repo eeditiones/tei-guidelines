@@ -50,7 +50,7 @@
                 <param name="id" value="substring-after(@target, '#')"/>
                 <param name="label" value="id(substring-after(@target, '#'), root($parameters?root))/head[1]/string()"/>
                 <param name="space" value="' '"/>
-                <pb:template xmlns="" xml:space="preserve"><a href="p5.xml?id=[[id]]" class="inner-ref">[[div]] [[space]] [[label]]</a></pb:template>
+                <pb:template xmlns="" xml:space="preserve"><a href="p5.xml?id=[[id]]#[[id]]" class="inner-ref">[[div]] [[space]] [[label]]</a></pb:template>
             </model>
         </modelSequence>
                     <modelSequence predicate="starts-with(@target, '#')">
