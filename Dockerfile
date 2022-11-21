@@ -3,7 +3,7 @@ FROM openjdk:8-jdk-slim as builder
 
 USER root
 
-ENV ANT_VERSION 1.10.11
+ENV ANT_VERSION 1.10.12
 ENV ANT_HOME /etc/ant-${ANT_VERSION}
 
 WORKDIR /tmp
@@ -25,8 +25,8 @@ ENV PATH ${PATH}:${ANT_HOME}/bin
 
 FROM builder as tei
 
-ARG TEMPLATING_VERSION=1.0.2
-ARG PUBLISHER_LIB_VERSION=2.10.0
+ARG TEMPLATING_VERSION=1.0.4
+ARG PUBLISHER_LIB_VERSION=2.10.1
 ARG ROUTER_VERSION=0.5.1
 # replace with name of your edition repository and choose branch to build
 ARG TEI_GUIDELINES_VERSION=master
@@ -34,12 +34,9 @@ ARG TEI_GUIDELINES_VERSION=master
 # add key
 RUN  mkdir -p ~/.ssh && ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
 
-# Replace git URL below to point to your git repository 
-RUN  git clone https://github.com/eeditiones/tei-guidelines.git \
-    # replace my-edition with name of your app
-    && cd tei-guidelines \
-    && echo Checking out ${TEI_GUIDELINES_VERSION} \
-    && git checkout ${TEI_GUIDELINES_VERSION} \
+# Build tei-publisher-app
+COPY . tei-guidelines/
+RUN  cd tei-guidelines \
     && ant
 
 RUN curl -L -o /tmp/oas-router-${ROUTER_VERSION}.xar http://exist-db.org/exist/apps/public-repo/public/oas-router-${ROUTER_VERSION}.xar
@@ -48,7 +45,7 @@ RUN curl -L -o /tmp/templating-${TEMPLATING_VERSION}.xar http://exist-db.org/exi
 
 FROM eclipse-temurin:11-jre-alpine
 
-ARG EXIST_VERSION=5.3.1
+ARG EXIST_VERSION=6.0.1
 
 RUN apk add curl
 
