@@ -2,8 +2,8 @@ xquery version "3.1";
 
 module namespace dapi="http://teipublisher.com/api/documents";
 
-import module namespace router="http://exist-db.org/xquery/router";
-import module namespace errors = "http://exist-db.org/xquery/router/errors";
+import module namespace router="http://e-editiones.org/roaster";
+import module namespace errors = "http://e-editiones.org/roaster/errors";
 import module namespace config="http://www.tei-c.org/tei-simple/config" at "../../config.xqm";
 import module namespace pages="http://www.tei-c.org/tei-simple/pages" at "../pages.xql";
 import module namespace pm-config="http://www.tei-c.org/tei-simple/pm-config" at "../../pm-config.xql";
@@ -36,8 +36,7 @@ declare function dapi:metadata($request as map(*)) {
                 "odd": $config?odd,
                 "template": $config?template,
                 "collection": substring-after(util:collection-name($xml), $config:data-root || "/"),
-		"lastModified": xmldb:last-modified(util:collection-name($xml), util:document-name($xml))
-
+                "lastModified": xmldb:last-modified(util:collection-name($xml), util:document-name($xml))
             }
         else
             error($errors:NOT_FOUND, "Document " || $doc || " not found")
@@ -344,7 +343,12 @@ declare function dapi:get-fragment($request as map(*)) {
     let $path := xmldb:decode-uri($request?parameters?doc)
     let $docs := config:get-document($path)
     return
-        cutil:check-last-modified($request, $docs, dapi:get-fragment(?, ?, $path))
+        if($docs) 
+        then (
+            cutil:check-last-modified($request, $docs, dapi:get-fragment(?, ?, $path))
+        ) else (
+            router:response(404, "text/text", $path)    
+        )
 };
 
 declare function dapi:get-fragment($request as map(*), $docs as node()*, $path as xs:string) {
@@ -505,15 +509,19 @@ declare function dapi:table-of-contents($request as map(*)) {
     let $doc := xmldb:decode-uri($request?parameters?id)
     let $documents := config:get-document($doc)
     return
-        cutil:check-last-modified($request, $documents, function($request as map(*), $documents as node()*) {
-            let $view := head(($request?parameters?view, $config:default-view))
-            let $xml := pages:load-xml($documents, $view, (), $doc)
-            return
+        if($documents)
+        then (
+            cutil:check-last-modified($request, $documents, function($request as map(*), $documents as node()*) {
+                let $xml := pages:load-xml($documents, $request?parameters?view, (), $doc)
+                return
                 if (exists($xml)) then
                     pages:toc-div(root($xml?data), $xml, $request?parameters?target, $request?parameters?icons)
                 else
                     error($errors:NOT_FOUND, "Document " || $doc || " not found")
-        })
+                })
+        ) else (
+            router:response(404, "text/text", $doc)        
+        )
 };
 
 declare function dapi:preview($request as map(*)) {

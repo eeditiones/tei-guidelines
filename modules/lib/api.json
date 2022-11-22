@@ -8,7 +8,7 @@
 	"servers": [
 		{
 			"description": "Endpoint for testing on localhost",
-			"url": "http://localhost:8080/exist/apps/guidelines"
+			"url": "http://localhost:8080/exist/apps/tei-publisher"
 		}
 	],
 	"tags": [
@@ -51,7 +51,11 @@
         {
             "name": "register",
             "description": "Manage entries in the local authority file"
-        }
+        },
+		{
+			"name": "nlp",
+			"description": "Entity recognition and other natural language processing features"
+		}
 	],
 	"components": {
 		"securitySchemes": {
@@ -367,7 +371,7 @@
 				"tags": ["collection"],
 				"operationId": "capi:upload",
 				"x-constraints": {
-					"group": "tei"
+					"groups": ["tei"]
 				},
 				"requestBody": {
 					"content": {
@@ -459,7 +463,7 @@
 				"tags": ["collection"],
 				"operationId": "capi:upload",
 				"x-constraints": {
-					"group": "tei"
+					"groups": ["tei"]
 				},
 				"parameters": [
 					{
@@ -609,7 +613,7 @@
 				"tags": ["documents"],
 				"operationId": "dapi:delete",
 				"x-constraints": {
-					"group": "tei"
+					"groups": ["tei"]
 				},
 				"parameters": [
 					{
@@ -1254,7 +1258,7 @@
 				"tags": ["odd"],
 				"operationId": "oapi:delete-odd",
 				"x-constraints": {
-					"group": "tei"
+					"groups": ["tei"]
 				},
 				"parameters": [
 					{
@@ -1283,7 +1287,7 @@
 				"tags": ["odd"],
 				"operationId": "oapi:create-odd",
 				"x-constraints": {
-					"group": "tei"
+					"groups": ["tei"]
 				},
 				"parameters": [
 					{
@@ -1338,7 +1342,7 @@
 				"tags": ["odd"],
 				"operationId": "oapi:save-odd",
 				"x-constraints": {
-					"group": "tei"
+					"groups": ["tei"]
 				},
 				"parameters": [
 					{
@@ -1465,7 +1469,7 @@
 				"operationId": "oapi:recompile",
 				"tags": ["odd"],
 				"x-constraints": {
-					"group": "tei"
+					"groups": ["tei"]
 				},
 				"parameters": [
 					{
@@ -1802,38 +1806,44 @@
 				"summary": "Login the user",
 				"description": "Login the given user",
 				"tags": ["user"],
-				"operationId": "rutil:login",
-				"parameters": [
-					{
-						"name": "user",
-						"in": "query",
-						"description": "Name of the user",
-						"schema": {
-							"type": "string",
-							"example": "tei",
-							"nullable": true
-						}
-					},
-					{
-						"name": "password",
-						"in": "query",
-						"schema": {
-							"type": "string",
-							"format": "password",
-							"example": "simple",
-							"nullable": true
-						}
-					},
-					{
-						"name": "logout",
-						"in": "query",
-						"description": "Set to some value to log out the current user",
-						"schema": {
-							"type": "string",
-							"nullable": true
-						}
-					}
-				],
+				"operationId": "auth:login",
+				"requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "nullable": true,
+                                "properties": {
+                                    "user": {
+                                        "description": "Name of the user",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password"
+                                    }
+                                }
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "type": "object",
+                                "nullable": true,
+                                "properties": {
+                                    "user": {
+                                        "description": "Name of the user",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
 				"responses": {
 					"200": {
 						"description": "OK",
@@ -1853,6 +1863,9 @@
 										},
 										"dba": {
 											"type": "boolean"
+										},
+										"domain": {
+											"type": "string"
 										}
 									}
 								}
@@ -2121,7 +2134,7 @@
 				"tags": ["dts"],
 				"operationId": "dts:import",
 				"x-constraints": {
-					"group": "tei"
+					"groups": ["tei"]
 				},
 				"parameters": [
 					{
@@ -2264,7 +2277,7 @@
 				"tags": ["annotations"],
 				"operationId": "anno:save",
 				"x-constraints": {
-					"group": "tei"
+					"groups": ["tei"]
 				},
 				"requestBody": {
 					"description": "An array of annotations to be applied",
@@ -2318,6 +2331,301 @@
 							"application/json": {
 								"schema": {
 									"type": "object"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/nlp/entities/{id}": {
+			"get": {
+				"summary": "Call entity extraction on a document",
+				"operationId": "nlp:entity-recognition",
+				"tags": ["nlp"],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"schema": {
+							"type": "string"
+						},
+						"required": true
+					},
+					{
+						"name": "model",
+						"in": "query",
+						"schema": {
+							"type": "string",
+							"example": "en_core_web_sm"
+						},
+						"required": true
+					},
+					{
+						"name": "debug",
+						"in": "query",
+						"schema": {
+							"type": "boolean",
+							"default": false
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "JSON structure listing the entities found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/nlp/patterns/{id}": {
+			"get": {
+				"summary": "Apply rule-based pattern matching",
+				"description": "Use rule-based pattern matching to find entities in a document",
+				"operationId": "nlp:pattern-recognition",
+				"tags": ["nlp"],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"schema": {
+							"type": "string"
+						},
+						"required": true
+					},
+					{
+						"name": "lang",
+						"in": "query",
+						"schema": {
+							"type": "string",
+							"default": "en"
+						}
+					},
+					{
+						"name": "debug",
+						"in": "query",
+						"schema": {
+							"type": "boolean",
+							"default": false
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "JSON structure listing the entities found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/nlp/text/{id}": {
+			"get": {
+				"summary": "Retrieve plain text of a document",
+				"description": "Get the plain text of the given document fragment to be fed into entity recognition",
+				"operationId": "nlp:plain-text",
+				"tags": ["nlp"],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"schema": {
+							"type": "string"
+						},
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Plain text of the document fragment",
+						"content": {
+							"text/text": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/nlp/status": {
+			"get": {
+				"summary": "Return status information about NER",
+				"description": "Return status information about NER, including installed pipelines",
+				"tags": ["nlp"],
+				"operationId": "nlp:status",
+				"responses": {
+					"200": {
+						"description": "JSON object describing status",
+						"content": {
+							"application/json":{
+								"schema": {
+									"type": "object"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/nlp/status/models": {
+			"get": {
+				"summary": "Return list of available models",
+				"tags": ["nlp"],
+				"operationId": "nlp:models",
+				"responses": {
+					"200": {
+						"description": "JSON array listing models",
+						"content": {
+							"application/json":{
+								"schema": {
+									"type": "array"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/nlp/train/{id}": {
+			"get": {
+				"summary": "Train an NER model",
+				"description": "Train an NER model based on training data, which will be generated from a given document or collection",
+				"tags": ["nlp"],
+				"operationId": "nlp:train-model",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Relative path to document or collection",
+						"schema": {
+							"type": "string"
+						},
+						"required": true
+					},
+					{
+						"name": "name",
+						"in": "query",
+						"description": "Name of the model to create",
+						"schema": {
+							"type": "string"
+						},
+						"required": true
+					},
+					{
+						"name": "base",
+						"in": "query",
+						"description": "Base model to extend",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "lang",
+						"in": "query",
+						"description": "Language to create the model for",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "copy_vectors",
+						"in": "query",
+						"description": "Base model to copy vector layer from",
+						"schema":{
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Process ID of the running training",
+						"content": {
+							"application/json":{
+								"schema": {
+									"type": "integer"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/nlp/log/{pid}": {
+			"get": {
+				"summary": "Return log messages for an ongoing training",
+				"tags": ["nlp"],
+				"operationId": "nlp:log",
+				"parameters": [
+					{
+						"name": "pid",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "integer"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Training completed",
+						"content": {
+							"text/text":{
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					},
+					"202": {
+						"description": "Training in progress",
+						"content": {
+							"text/text":{
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/nlp/data/{id}": {
+			"get": {
+				"summary": "Download training data for NER",
+				"description": "Generate training data for NER from a given document or collection",
+				"tags": ["nlp"],
+				"operationId": "nlp:train",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Relative path to document or collection",
+						"schema": {
+							"type": "string"
+						},
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "JSON array with training data",
+						"content": {
+							"application/json":{
+								"schema": {
+									"type": "array"
 								}
 							}
 						}
