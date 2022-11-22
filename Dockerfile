@@ -27,7 +27,8 @@ FROM builder as tei
 
 ARG TEMPLATING_VERSION=1.0.4
 ARG PUBLISHER_LIB_VERSION=2.10.1
-ARG ROUTER_VERSION=0.5.1
+ARG ROUTER_VERSION=1.7.3
+
 # replace with name of your edition repository and choose branch to build
 ARG TEI_GUIDELINES_VERSION=master
 
@@ -39,7 +40,7 @@ COPY . tei-guidelines/
 RUN  cd tei-guidelines \
     && ant
 
-RUN curl -L -o /tmp/oas-router-${ROUTER_VERSION}.xar http://exist-db.org/exist/apps/public-repo/public/oas-router-${ROUTER_VERSION}.xar
+RUN curl -L -o /tmp/roaster-${ROUTER_VERSION}.xar http://exist-db.org/exist/apps/public-repo/public/roaster-${ROUTER_VERSION}.xar
 RUN curl -L -o /tmp/tei-publisher-lib-${PUBLISHER_LIB_VERSION}.xar http://exist-db.org/exist/apps/public-repo/public/tei-publisher-lib-${PUBLISHER_LIB_VERSION}.xar
 RUN curl -L -o /tmp/templating-${TEMPLATING_VERSION}.xar http://exist-db.org/exist/apps/public-repo/public/templating-${TEMPLATING_VERSION}.xar
 
