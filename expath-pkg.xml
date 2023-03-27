@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package xmlns="http://expath.org/ns/pkg" spec="1.0" version="0.1" name="http://www.tei-c.org/guidelines" abbrev="guidelines">
+<package xmlns="http://expath.org/ns/pkg" spec="1.0" version="0.2" name="http://www.tei-c.org/guidelines" abbrev="guidelines">
     <title>TEI Guidelines</title>
-    <dependency package="http://exist-db.org/html-templating" semver-min="1.0.2"/>
-    <dependency package="http://existsolutions.com/apps/tei-publisher-lib" semver-min="2.10.0" />
-    <dependency package="http://e-editiones.org/roaster" semver-min="1.7.2"/>
+    <dependency package="http://exist-db.org/html-templating" semver="1"/>
+    <dependency package="http://existsolutions.com/apps/tei-publisher-lib" semver="3"/>
+    <dependency package="http://e-editiones.org/roaster" semver="1"/>
 </package>
