@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
       - name: Build documentation
-        run: uvx --from open-processing-model opm -q odd document --force -o site
+        run: uvx --from git+https://github.com/eeditiones/open-processing-model.git@main opm -q odd document --force -o site
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
