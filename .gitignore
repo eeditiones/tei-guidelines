@@ -1,9 +1,7 @@
-build
-transform
-node_modules
-resources/lib/
-resources/css/leaflet/
-resources/css/prismjs
-resources/images/openseadragon
-resources/images/leaflet
-resources/i18n/common
+# SPDX-FileCopyrightText: 2026 e-editiones
+# SPDX-License-Identifier: CC0-1.0
+
+chunks/
+*.pdf
+.DS_Store
+site/
