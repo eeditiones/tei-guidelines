@@ -3,80 +3,79 @@ SPDX-FileCopyrightText: 2026 e-editiones
 SPDX-License-Identifier: CC0-1.0
 -->
 
-# ODD documentation
+# TEI Guidelines
 
-A configuration for generating documentation from an ODD. Can also be used to generate the full
-TEI P5 documentation.
+A static website of the [TEI P5 Guidelines](https://tei-c.org/guidelines/p5/), generated with
+[opm](https://github.com/eeditiones/open-processing-model). Every chapter is a page, and every
+element, class, macro and datatype has its own reference page. The site has a sidebar, search for
+element and class names, a light/dark theme and works offline as an installable app.
 
-```bash
-opm odd document <myodd.odd> --force --preview
-```
+The site is published to GitHub Pages by the workflow in `.github/workflows/pages.yml` on every push
+to `master`.
 
-writes a documentation website for the given ODD to `site/` and opens it in a browser.
-
-Without `.odd` argument, it generates the TEI P5 documentation for the latest version by default.
-The full `p5.odd` will be downloaded and cached, because it serves as the base for all TEI ODDs.
-
-You can change the default ODD to render by setting `source` under `[document]` in `opm.toml`.
-
-## A sample customisation
-
-`data/tei_psalmy.odd` is a real customisation to try this on: the schema of
-a didactic edition of Polish Psalters, made for the
-[Jagiellonian Digital Platform](https://labedyt.dhlab.uj.edu.pl/index.html) by
-Magdalena Turska and Helena Bermúdez Sabel. Besides the schema it carries its
-own encoding guidelines, nine chapters on how the edition marks up psalms,
-verses, readings and their analysis, with examples. The site shows these
-chapters first, followed by reference pages for every element, class and
-macro the schema keeps.
+## Building
 
 ```bash
-opm odd document data/tei_psalmy.odd --force --preview
+opm odd document --force --preview
 ```
 
-The ODD is distributed under the Creative Commons Attribution-ShareAlike 4.0
-International licence; see its `teiHeader`.
+writes the site to `site/` and opens it in a browser. The latest TEI P5 source is downloaded on first
+use and cached.
 
-## PDF
+The same project also produces other formats:
+
+```bash
+opm odd document -t typst      # PDF
+opm odd document -t markdown   # Markdown
+opm odd document -t epub       # EPUB
+```
+
+To get the pages as data for another static site generator:
 
 ```bash
 opm odd prepare -o schema.xml
-opm transform schema.xml -t typst -o docs.pdf
-# only the reference part (the A–Z appendices), or only the text:
-opm transform schema.xml -t typst -p part=reference -o reference.pdf
-```
-
-## Markdown
-
-```bash
-opm transform schema.xml -t markdown -o docs.md
-opm transform schema.xml -t markdown --xpath 'id("HD")' -o docs.md # just one chapter
+opm chunk schema.xml --format json
 ```
 
 ## What is where
 
 | file | what it decides |
 | --- | --- |
-| `opm.toml` | what to document (`[document]`), and the three chunking runs: the text, the home page (`mode = "toc"`), then one reference page per spec |
-| `odd/tagdocs.odd`, `odd/tagdocs.css` | how every page renders — the processing models |
-| `templates/page.html.j2` | the page around each chunk: header, sidebar, rails, extending opm's page layout (`opm/layout.html.j2`) |
+| `opm.toml` | what to document, and the three runs that make the site: the chapters, the home page, then one reference page per spec |
+| `odd/tagdocs.odd`, `odd/tagdocs.css` | how every page is rendered |
+| `templates/page.html.j2` | the page around each chunk: header, sidebar, right-hand rail |
 | `templates/document.css`, `search.js`, `theme.js` | the site's look, search box and light/dark switch |
 | `templates/nav.xml` | the sidebar list |
-| `templates/logo.svg` | the logo in the header and the browser tab; replace it with your own, or put another image beside it and name it under `[context]` in `opm.toml` |
-| `templates/tagdocs.typ.j2` | the PDF: title page, contents, page layout |
-| `data/tei_psalmy.odd` | a sample customisation with its own encoding guidelines |
+| `templates/logo.svg` | the logo in the header and browser tab |
+| `templates/tagdocs.typ.j2`, `epub.css` | the PDF and EPUB output |
+| `pwa/` | web app manifest, service worker and icons that make the site installable |
+| `data/tei_psalmy.odd` | a sample customisation, for testing the build on something smaller than the full Guidelines |
 
-Keep `page.html.j2` and `tagdocs.typ.j2`: `opm.toml` points to them, so the
-site and the PDF cannot be built without them. Delete any other file in
-`templates/` and opm uses its own copy instead; the fonts always come from
-there. The stylesheets, scripts, fonts
-and logo are copied into `assets/` in the site.
+`templates/page.html.j2` and `templates/tagdocs.typ.j2` must stay, because `opm.toml` points to them.
+For any other file in `templates/`, opm falls back to its own copy if you delete it.
 
-## Other outputs
+## Installable app
 
-The same runs give a static site generator its input:
+`pwa/sw.js` caches the page shell and every page the reader opens, so visited pages work offline.
+opm does not copy these files, so the workflow copies them into the site root after the build:
 
 ```bash
-opm odd prepare -o schema.xml
-opm chunk schema.xml --format json
+cp pwa/app.webmanifest pwa/sw.js pwa/icon-*.png site/
 ```
+
+Do this after a local build too if you want to try the installed app. When the site changes, bump
+`VERSION` in `pwa/sw.js` so readers' old caches are dropped.
+
+## Documenting a customisation
+
+To document your own ODD instead of the full Guidelines, pass it on the command line or set `source`
+under `[document]` in `opm.toml`:
+
+```bash
+opm odd document data/tei_psalmy.odd --force --preview
+```
+
+`data/tei_psalmy.odd` is the schema of a didactic edition of Polish Psalters, made for the
+[Jagiellonian Digital Platform](https://labedyt.dhlab.uj.edu.pl/index.html) by Magdalena Turska and
+Helena Bermúdez Sabel. It is distributed under the Creative Commons Attribution-ShareAlike 4.0
+International licence; see its `teiHeader`.
