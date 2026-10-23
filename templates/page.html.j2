@@ -21,6 +21,8 @@ classes = ["doc"]
       which stays sharp at any size; no .ico or apple-touch-icon, because
       rasterizing one would mean a dependency the site builder does not have. -#}
   <link rel="icon" href="{{ brand.logo_src(context.logo, assets) | trim }}"{% if context.logo.endswith('.svg') %} type="image/svg+xml"{% endif %}>
+  <link rel="manifest" href="app.webmanifest">
+  <meta name="theme-color" content="#ffffff">
 {% endblock %}
 
 {% block title %}<title>{% if chunk.xml_id and chunk.xml_id != 'index' %}{{ chunk.xml_id }} — {% endif %}{{ context.site_name }}</title>{% endblock %}
@@ -29,6 +31,11 @@ classes = ["doc"]
   {#- Before the page paints, so a reader's light/dark choice never flashes. -#}
   <script src="{{ assets }}/theme.js"></script>
   <script src="{{ assets }}/search.js" defer></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js'); });
+    }
+  </script>
 {% endblock %}
 
 {% block body_class %}{% if fragments.nav %}doc--with-nav{% endif %}{% endblock %}

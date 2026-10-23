@@ -22,6 +22,8 @@ jobs:
       - uses: astral-sh/setup-uv@v5
       - name: Build documentation
         run: uvx --from git+https://github.com/eeditiones/open-processing-model.git@main opm -q odd document --force -o site
+      - name: Add app manifest and service worker
+        run: cp pwa/app.webmanifest pwa/sw.js pwa/icon-*.png site/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
