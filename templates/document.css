@@ -474,34 +474,16 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--doc-display); font-weight: 600; }
   color: var(--doc-ink);
 }
 .lead:empty { display: none; }
-.home-sub:empty, .home-byline:empty { display: none; }
-.home-sub {
-  margin: 0 0 0.35rem;
-  font-family: var(--doc-body);
-  font-size: 1.05rem;
-  color: var(--doc-muted);
-}
-.home-byline {
-  margin: 0 0 1.5rem;
-  font-family: var(--doc-body);
-  font-size: 0.938rem;
-  color: var(--doc-muted);
-}
-/* The edition line closes the masthead: smaller than the byline above it,
-   and gone when the header carries no editionStmt. */
+/* The edition line sits under the title page, inside its bottom margin, and
+   is gone when the header carries no editionStmt. */
 .home-edition {
-  margin: -0.9rem 0 1.5rem;
+  margin: -2rem 0 2.5rem;
+  text-align: center;
   font-family: var(--doc-body);
   font-size: 0.813rem;
   color: var(--doc-muted);
 }
 .home-edition:empty { display: none; }
-.home-author + .home-author::before { content: ", "; }
-/* Both halves of the byline are optional — a TEI docDate holding nothing but a
-   processing instruction renders empty — so neither the separator nor the line
-   itself shows up on its own. */
-.home-date:not(:empty)::before { content: " · "; }
-.home-byline:not(:has(.home-author:not(:empty), .home-date:not(:empty))) { display: none; }
 .home > p {
   font-size: 1.1875rem;
   line-height: 1.55;
@@ -518,6 +500,13 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--doc-display); font-weight: 600; }
   line-height: 1.25;
   margin: 0.75rem 0 1rem;
 }
+.title-page__sub {
+  margin: -0.5rem 0 1rem;
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--doc-muted);
+}
+.title-page__sub:empty { display: none; }
 .title-page__byline, .title-page__imprint { color: var(--doc-muted); }
 .muted { color: var(--doc-muted); }
 
@@ -1086,6 +1075,40 @@ a.spec__chip:hover { border-color: var(--doc-amber); color: var(--doc-ink); text
   border-top: 0;
 }
 .catalog h2:first-of-type { margin-top: 1rem; }
+/* A–Z or by module: two buttons joined into one control, under the title. */
+.catalog-switch {
+  display: inline-flex;
+  margin: 0.25rem 0 0.5rem;
+  border: 1px solid var(--doc-rule);
+  border-radius: 0.38rem;
+  overflow: hidden;
+}
+.catalog-switch button {
+  font-family: var(--doc-body);
+  font-size: 0.813rem;
+  padding: 0.3rem 0.85rem;
+  border: 0;
+  background: transparent;
+  color: var(--doc-muted);
+  cursor: pointer;
+}
+.catalog-switch button + button { border-left: 1px solid var(--doc-rule); }
+.catalog-switch button:hover { color: var(--doc-ink); }
+.catalog-switch button[aria-pressed="true"] {
+  background: var(--doc-wash);
+  color: var(--doc-amber-text);
+  font-weight: 600;
+}
+.catalog-switch button:focus-visible { outline: 2px solid var(--doc-amber); outline-offset: -2px; }
+.catalog [data-view] > h2:first-child { margin-top: 1rem; }
+/* One column width for every letter's or module's table of attributes, so
+   "Defined on" does not jump from one table to the next. Wide enough for the
+   longest name, @replacementPattern. */
+.catalog .spec-table { table-layout: fixed; }
+.catalog .spec-table th:first-child { width: 12rem; }
+.catalog .spec-table th:last-child { width: auto; }
+/* Grouped by module, the heading already names each entry's module. */
+.catalog [data-view="module"] .catalog__list .muted { display: none; }
 .doc-main .toc { list-style: none; padding: 0; font-family: var(--doc-body); font-size: 0.938rem; }
 .doc-main .toc li { margin: 0.35rem 0; }
 /* Outline labels — "1.2.1", "iv.1.", "Appendix A" — opening a heading or a

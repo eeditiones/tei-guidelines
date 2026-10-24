@@ -44,7 +44,7 @@ opm chunk schema.xml --format json
 | `opm.toml` | what to document, and the three runs that make the site: the chapters, the home page, then one reference page per spec |
 | `odd/tagdocs.odd`, `odd/tagdocs.css` | how every page is rendered |
 | `templates/page.html.j2` | the page around each chunk: header, sidebar, right-hand rail |
-| `templates/document.css`, `search.js`, `theme.js` | the site's look, search box and light/dark switch |
+| `templates/document.css`, `search.js`, `theme.js` | the site's look, search box, light/dark switch and the catalogs' A–Z / by module switch |
 | `templates/nav.xml` | the sidebar list |
 | `templates/logo.svg` | the logo in the header and browser tab |
 | `templates/tagdocs.typ.j2`, `epub.css` | the PDF and EPUB output |

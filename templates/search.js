@@ -75,6 +75,146 @@
   });
 })();
 
+// The catalog appendices, A–Z or by module. The page holds the A–Z lists, each
+// entry stamped with its module (an attribute row with the module of each
+// element or class that defines it, in order); the module view is built from
+// them on first use. An attribute defined in several modules is listed under
+// each, with that module's owners only. Runs before the rail below, so the
+// rail lists the headings of the view a reader last chose.
+(function () {
+  var KEY = 'opm-doc-catalog-view';
+  var sections = document.querySelectorAll('section.catalog[data-catalog]');
+  if (!sections.length) return;
+
+  function stored() {
+    try {
+      return localStorage.getItem(KEY);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function store(view) {
+    try {
+      localStorage.setItem(KEY, view);
+    } catch (e) {}
+  }
+
+  function heading(module) {
+    var h2 = document.createElement('h2');
+    h2.id = 'module-' + module;
+    h2.textContent = module;
+    return h2;
+  }
+
+  // module → its entries, modules A–Z; the entries keep their A–Z order.
+  function grouped(add) {
+    var groups = {};
+    add(function (module, node) {
+      (groups[module] = groups[module] || []).push(node);
+    });
+    return Object.keys(groups).sort().map(function (m) { return [m, groups[m]]; });
+  }
+
+  function specView(az, view) {
+    grouped(function (put) {
+      az.querySelectorAll('li[data-module]').forEach(function (li) {
+        put(li.getAttribute('data-module') || '-', li.cloneNode(true));
+      });
+    }).forEach(function (group) {
+      var ul = document.createElement('ul');
+      ul.className = 'catalog__list';
+      group[1].forEach(function (li) { ul.appendChild(li); });
+      view.appendChild(heading(group[0]));
+      view.appendChild(ul);
+    });
+  }
+
+  function attView(az, view) {
+    var thead = az.querySelector('thead');
+    grouped(function (put) {
+      az.querySelectorAll('tr[data-modules]').forEach(function (tr) {
+        var modules = tr.getAttribute('data-modules').split(' ');
+        var owners = tr.cells[1] ? tr.cells[1].children : [];
+        var seen = {};
+        modules.forEach(function (module) {
+          if (seen[module]) return;
+          seen[module] = true;
+          var row = tr.cloneNode(true);
+          var cell = row.cells[1];
+          cell.textContent = '';
+          modules.forEach(function (m, i) {
+            if (m === module && owners[i]) cell.appendChild(owners[i].cloneNode(true));
+          });
+          put(module, row);
+        });
+      });
+    }).forEach(function (group) {
+      var table = document.createElement('table');
+      table.className = 'spec-table';
+      if (thead) table.appendChild(thead.cloneNode(true));
+      var tbody = document.createElement('tbody');
+      group[1].forEach(function (row) { tbody.appendChild(row); });
+      table.appendChild(tbody);
+      view.appendChild(heading(group[0]));
+      view.appendChild(table);
+    });
+  }
+
+  sections.forEach(function (section) {
+    var h1 = section.querySelector('h1');
+    if (!h1) return;
+    var az = document.createElement('div');
+    az.setAttribute('data-view', 'az');
+    while (h1.nextSibling) az.appendChild(h1.nextSibling);
+    var byModule = document.createElement('div');
+    byModule.setAttribute('data-view', 'module');
+    byModule.hidden = true;
+    var built = false;
+
+    var bar = document.createElement('div');
+    bar.className = 'catalog-switch';
+    bar.setAttribute('role', 'group');
+    bar.setAttribute('aria-label', 'Sort');
+    var buttons = {};
+    [['az', 'A–Z'], ['module', 'By module']].forEach(function (b) {
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = b[1];
+      button.addEventListener('click', function () {
+        show(b[0]);
+        store(b[0]);
+        document.dispatchEvent(new CustomEvent('doc:toc'));
+      });
+      buttons[b[0]] = button;
+      bar.appendChild(button);
+    });
+
+    function show(view) {
+      if (view === 'module' && !built) {
+        (section.getAttribute('data-catalog') === 'atts' ? attView : specView)(az, byModule);
+        built = true;
+      }
+      az.hidden = view === 'module';
+      byModule.hidden = view !== 'module';
+      buttons.az.setAttribute('aria-pressed', String(view !== 'module'));
+      buttons.module.setAttribute('aria-pressed', String(view === 'module'));
+    }
+
+    section.appendChild(bar);
+    section.appendChild(az);
+    section.appendChild(byModule);
+    // A link to a letter (#A) opens the A–Z view, whatever was chosen before;
+    // one to a module (#module-core) the module view, which only now has it.
+    var id = location.hash && decodeURIComponent(location.hash.slice(1));
+    var target = id && document.getElementById(id);
+    show(target && az.contains(target) ? 'az'
+      : stored() === 'module' || /^module-/.test(id) ? 'module' : 'az');
+    target = !target && id && document.getElementById(id);
+    if (target && byModule.contains(target)) target.scrollIntoView();
+  });
+})();
+
 (function () {
   var aside = document.querySelector('[data-page-toc]');
   var main = document.querySelector('.doc-main');
@@ -121,18 +261,26 @@
     heading.id = id;
     return id;
   }
-  main.querySelectorAll('h2, h3').forEach(function (heading) {
-    var id = anchor(heading);
-    entry(id, (heading.textContent || '').trim(), heading.tagName === 'H3');
-    var section = heading.tagName === 'H2' ? heading.closest('.spec-section') : null;
-    if (section) subEntries(section);
-  });
-  if (!ul.children.length) {
+  // Built again on `doc:toc`, when the page shows other headings (a catalog
+  // switched between A–Z and by module); hidden headings are left out.
+  function build() {
+    ul.textContent = '';
+    seen = {};
+    main.querySelectorAll('h2, h3').forEach(function (heading) {
+      if (heading.closest('[hidden]')) return;
+      var id = anchor(heading);
+      entry(id, (heading.textContent || '').trim(), heading.tagName === 'H3');
+      var section = heading.tagName === 'H2' ? heading.closest('.spec-section') : null;
+      if (section) subEntries(section);
+    });
+    var empty = !ul.children.length;
     // Keep the rail when it still carries the chapter's previous/next pair.
     var nav = aside.querySelector('.chapter-nav');
-    ul.hidden = true;
+    ul.hidden = empty;
     var label = aside.querySelector('.doc-aside__label');
-    if (label) label.hidden = true;
-    if (!nav) aside.hidden = true;
+    if (label) label.hidden = empty;
+    aside.hidden = empty && !nav;
   }
+  build();
+  document.addEventListener('doc:toc', build);
 })();
